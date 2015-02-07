@@ -10,11 +10,12 @@ class Mountain(models.Model):
 	def __str__(self):
 		return self.mountain_name + ' (' + str(self.mountain_elevation) + ' m.n.m.)'
 
-class Climbed(models.Model):
-	user = models.ForeignKey(User)
-	climbed_meters = models.IntegerField()
-
-class ClimbObject(models.Model):
+class Object(models.Model):
 	user = models.ForeignKey(User)
 	object_name = models.CharField(max_length=200)
 	height = models.IntegerField()
+
+class Climbed(models.Model):
+	user = models.ForeignKey(User)
+	climbed_object = models.ForeignKey(Object)
+	
