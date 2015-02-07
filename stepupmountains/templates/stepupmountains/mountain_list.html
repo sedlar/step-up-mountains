@@ -17,7 +17,7 @@
 {% if mountain_list %}
 	<table>
 		{% for mountain in mountain_list %}
-			<tr><td>{{mountain.mountain_name}}</td><td>{{mountain.mountain_elevation}} m.n.m.</td><td>{{mountain.mountain_comment}}</td></tr>
+			<tr><td>{{mountain.name}}</td><td>{{mountain.elevation}} m.n.m.</td><td>{{mountain.comment}}</td></tr>
 		{% endfor %}
 	</table>
 {% else %}
