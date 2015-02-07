@@ -10,7 +10,7 @@
 		<form action="{% url 'stepupmountains:climb_object' %}" method="POST">
 		{% csrf_token %}
 		<input type="hidden" name="climbed_object" id="climbed_object" value="{{ object.id }}" />
-		<input type="submit" name="Climb" id="climb_button" value="Climb {{ object.object_name }}" />
+		<input type="submit" name="Climb" id="climb_button" value="Climb {{ object.name }}" />
 		</form>
 	{% endfor %}
 {% endif %}
