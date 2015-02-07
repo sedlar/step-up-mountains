@@ -1,6 +1,6 @@
 from django.contrib import admin
 from stepupmountains.models import Mountain
-from stepupmountains.models import Object
+from stepupmountains.models import ClimbingObject
 
 class MountainAdmin(admin.ModelAdmin):
 	list_display = ['mountain_name', 'mountain_elevation', 'mountain_comment']
@@ -10,4 +10,4 @@ class MountainAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Mountain, MountainAdmin)
-admin.site.register(Object)
+admin.site.register(ClimbingObject)
