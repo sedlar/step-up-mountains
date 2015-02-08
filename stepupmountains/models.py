@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 class Mountain(models.Model):
@@ -20,4 +21,5 @@ class ClimbingObject(models.Model):
 class Climbed(models.Model):
 	user = models.ForeignKey(User)
 	climbed_object = models.ForeignKey(ClimbingObject)
+	datetime = models.DateTimeField(default=timezone.now)
 	
