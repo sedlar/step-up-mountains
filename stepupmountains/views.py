@@ -96,8 +96,9 @@ def climb_object(request):
 		return HttpResponseForbidden('You are not allowed to climb this object')
 
 	latest_climb = get_all_climbs(request.user).extra(order_by = ['-datetime']).first()
-	if latest_climb.datetime + datetime.timedelta(minutes=5) > timezone.now():
-		return HttpResponseRedirect(reverse('stepupmountains:not_so_quickly'))
+	if latest_climb:
+		if latest_climb.datetime + datetime.timedelta(minutes=5) > timezone.now():
+			return HttpResponseRedirect(reverse('stepupmountains:not_so_quickly'))
 			
 	climb = Climb(user=request.user, climbed_object=climbed_object)
 	climb.save()
