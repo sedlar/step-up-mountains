@@ -18,8 +18,10 @@ class ClimbingObject(models.Model):
 	def __str__(self):
 		return self.name
 
-class Climbed(models.Model):
+class Climb(models.Model):
 	user = models.ForeignKey(User)
 	climbed_object = models.ForeignKey(ClimbingObject)
 	datetime = models.DateTimeField(default=timezone.now)
+	def __str__(self):
+		return str(self.user) + ' climbed ' + self.climbed_object.name + ' on ' + str(self.datetime)
 	
