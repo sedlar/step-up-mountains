@@ -10,7 +10,6 @@
     <div id="account">
 {% if user.is_authenticated %}
 	<p>User: {{ user.get_username }}</p>
-	<p>Total ascent: <b>{{ total_climbed }}</b> meters.</p>
 	<p><a href="{% url 'stepupmountains:auth_logout' %}">Logout</a></p>
 {% else %}
 	<form action="{% url 'stepupmountains:auth_login' %}" method="POST">
@@ -27,7 +26,7 @@
         {% block sidebar %}
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/login/">Blog</a></li>
+            <li><a href="/add_object/">Add climbing object</a></li>
         </ul>
         {% endblock %}
     </div>

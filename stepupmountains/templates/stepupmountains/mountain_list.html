@@ -1,15 +1,20 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Mountain's list{% endblock %}
 {% block content %}
+{% if user.is_authenticated %}
+	<p>Total ascent: <b>{{ total_climbed }}</b> meters.</p>
+{% endif %}
 {% if object_list %}
-		{% for object in object_list %}
-			<form action="{% url 'stepupmountains:climb_object' %}" method="POST">
-			{% csrf_token %}
-			<input type="hidden" name="climbed_object" id="climbed_object" value="{{ object.id }}" />
-			<input type="submit" name="Climb" id="climb_button" value="Climb {{ object.name }}" />
-			</form>
-		{% endfor %}
-	{% endif %}
+	{% for object in object_list %}
+		<form action="{% url 'stepupmountains:climb_object' %}" method="POST">
+		{% csrf_token %}
+		<input type="hidden" name="climbed_object" id="climbed_object" value="{{ object.id }}" />
+		<input type="submit" name="Climb" id="climb_button" value="Climb {{ object.name }}" />
+		</form>
+	{% endfor %}
+{% else %}
+	<p><b><a href="{% url 'stepupmountains:add_object' %}">Add some object to climb first.</a></b></p>
+{% endif %}
 
 {% if mountain_list %}
 	<table>

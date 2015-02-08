@@ -5,3 +5,8 @@ table {
 table, th, td {
     border: 1px solid black;
 }
+
+#even_Climbed { background-color: #00CC00 }
+#odd_Climbed { background-color: #009900 }
+#even_NotClimbed { background-color: #CCCCCC }
+#odd_NotClimbed { background-color: #AAAAAA }

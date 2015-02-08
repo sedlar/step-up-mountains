@@ -1,0 +1,11 @@
+{% extends "stepupmountains/base_generic.html" %}
+{% block title %}Login Failed{% endblock %}
+{% block content %}
+	<form action="{% url 'stepupmountains:add_object_do' %}" method="POST">
+		{% csrf_token %}
+		Object name: <input type="text" name="object_name" id="object_name" value="" /><br />
+		Height: <input type="text" name="object_height" id="object_height" value="" /><br />
+		<input type="submit" name="add" id="add" value="Add object" />
+	</form>
+{% endblock %}
+

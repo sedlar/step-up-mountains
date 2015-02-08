@@ -12,6 +12,25 @@ from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
+def add_object_do(request):
+	if not request.user.is_authenticated():
+		return HttpResponseForbidden('You need to log in before adding objects')
+	object_name = request.POST['object_name']
+	object_height = request.POST['object_height']
+	climbing_object = ClimbingObject(user = request.user, name = object_name, height = object_height)
+	climbing_object.save()
+	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+
+		
+
+
+def add_object(request):
+	if request.user.is_authenticated():
+		return render(request, 'stepupmountains/add_object_form.html')
+	else:
+		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+	
+
 def login_failed(request):
 	return render(request, 'stepupmountains/login_failed.html')
 
@@ -31,16 +50,30 @@ def auth_login(request):
 				
 	return HttpResponseRedirect(reverse('stepupmountains:login_failed'))
 
+def get_all_objects(user):
+	all_objects = []
+	if user.is_authenticated():
+		all_objects = ClimbingObject.objects.get_user_objects(user)
+	return all_objects
+
+def get_all_climbs(user):
+	all_climbs = []
+	if user.is_authenticated():
+		all_climbs = Climb.objects.get_user_objects(user)
+	return all_climbs
+
+
+def get_total_ascent(user):
+	total_climbed=0
+	all_climbs = get_all_climbs(user)
+	for climb in all_climbs:
+		total_climbed += climb.climbed_object.height
+	return total_climbed
+
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
-	all_objects = []
-	all_climbs = []
-	total_climbed=0
-	if request.user.is_authenticated():
-		all_objects = ClimbingObject.objects.get_user_objects(request.user)
-		all_climbs = Climb.objects.get_user_objects(request.user)
-		for climb in all_climbs:
-			total_climbed += climb.climbed_object.height
+	all_objects = get_all_objects(request.user)
+	total_climbed = get_total_ascent(request.user)
 	for mountain in all_mountains:
 		mountain.climbed = Mountain.is_climbed(mountain, total_climbed)
 	context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': total_climbed}
