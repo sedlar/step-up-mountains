@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
+import re
 
 # Create your views here.
 
@@ -17,6 +18,8 @@ def add_object_do(request):
 		return HttpResponseForbidden('You need to log in before adding objects')
 	object_name = request.POST['object_name']
 	object_height = request.POST['object_height']
+	if not object_name or not re.match("^[0-9]+$", object_height):
+		return HttpResponseRedirect(reverse('stepupmountains:add_object'))
 	climbing_object = ClimbingObject(user = request.user, name = object_name, height = object_height)
 	climbing_object.save()
 	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))

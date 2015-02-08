@@ -1,7 +1,9 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Login Failed{% endblock %}
 {% block content %}
-	<form action="{% url 'stepupmountains:add_object_do' %}" method="POST">
+    {% load staticfiles %}
+    <script src="{% static 'stepupmountains/validateAddObjectForm.js' %}"></script> 
+	<form action="{% url 'stepupmountains:add_object_do' %}" method="POST" name="add_object" onsubmit="return validateAddObjectForm()">
 		{% csrf_token %}
 		Object name: <input type="text" name="object_name" id="object_name" value="" /><br />
 		Height: <input type="text" name="object_height" id="object_height" value="" /><br />
