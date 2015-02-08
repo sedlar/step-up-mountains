@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'stepupmountains/style.css' %}" />
+    <title>{% block title %}My amazing site{% endblock %}</title>
+</head>
+
+<body>
+    <div id="account">
+{% if user.is_authenticated %}
+	<p>User: {{ user.get_username }}</p>
+	<p>Total ascent: <b>{{ total_climbed }}</b> meters.</p>
+	<p><a href="{% url 'stepupmountains:auth_logout' %}">Logout</a></p>
+{% else %}
+	<form action="{% url 'stepupmountains:auth_login' %}" method="POST">
+		{% csrf_token %}
+		Username: <input type="text" name="username" id="username" value="" /><br />
+		Password: <input type="password" name="password" id="password" value="" /><br />
+		<input type="submit" name="Login" id="login" value="Login" />
+	</form>
+
+{% endif %}
+
+    </div>
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/login/">Blog</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

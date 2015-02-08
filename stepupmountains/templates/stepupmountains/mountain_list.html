@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'stepupmountains/style.css' %}" />
-</head>
-<body>
-{% if user.is_authenticated %}
-	{% if object_list %}
+{% extends "stepupmountains/base_generic.html" %}
+{% block title %}Mountain's list{% endblock %}
+{% block content %}
+{% if object_list %}
 		{% for object in object_list %}
 			<form action="{% url 'stepupmountains:climb_object' %}" method="POST">
 			{% csrf_token %}
@@ -15,10 +10,7 @@
 			</form>
 		{% endfor %}
 	{% endif %}
-<p>Total ascent: <b>{{total_climbed}}</b> meters.</p>
-{% else %}
-<p>Login to be able to track your ascent</p>
-{% endif %}
+
 {% if mountain_list %}
 	<table>
 		{% for mountain in mountain_list %}
@@ -28,4 +20,5 @@
 {% else %}
 	<p>No mountains were found.<p>
 {% endif %}
-</html>
+{% endblock %}
+

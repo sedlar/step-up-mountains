@@ -6,9 +6,30 @@ from stepupmountains.models import Climb
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden
 from django.core.urlresolvers import reverse
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
+
+def login_failed(request):
+	return render(request, 'stepupmountains/login_failed.html')
+
+def auth_logout(request):
+	logout(request)
+	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+
+def auth_login(request):
+	user = authenticate(username=request.POST['username'], password=request.POST['password'])
+	if user is not None:
+		if user.is_active:
+			login(request, user)
+			if request.META['HTTP_REFERER']:
+				return HttpResponseRedirect(request.META['HTTP_REFERER'])
+			else:
+				return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+				
+	return HttpResponseRedirect(reverse('stepupmountains:login_failed'))
 
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
@@ -25,6 +46,8 @@ def mountain_list(request):
 	return render(request, 'stepupmountains/mountain_list.html', context)
 
 def climb_object(request):
+	if not request.user.is_authenticated():
+		return HttpResponseForbidden('Login before climbing')	
 	climbed_object = get_object_or_404(ClimbingObject, pk=request.POST['climbed_object'])
 	if request.user != climbed_object.user:
 		return HttpResponseForbidden('You are not allowed to climb this object')
