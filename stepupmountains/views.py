@@ -41,7 +41,8 @@ def mountain_list(request):
 		all_climbs = Climb.objects.get_user_objects(request.user)
 		for climb in all_climbs:
 			total_climbed += climb.climbed_object.height
-
+	for mountain in all_mountains:
+		mountain.climbed = Mountain.is_climbed(mountain, total_climbed)
 	context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': total_climbed}
 	return render(request, 'stepupmountains/mountain_list.html', context)
 
