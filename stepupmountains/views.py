@@ -9,9 +9,15 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
+import datetime
+from datetime import timedelta
 import re
 
 # Create your views here.
+
+def not_so_quickly(request):
+	return render(request, 'stepupmountains/not_so_quickly.html')
 
 def add_object_do(request):
 	if not request.user.is_authenticated():
@@ -89,6 +95,10 @@ def climb_object(request):
 	if request.user != climbed_object.user:
 		return HttpResponseForbidden('You are not allowed to climb this object')
 
+	latest_climb = get_all_climbs(request.user).extra(order_by = ['-datetime']).first()
+	if latest_climb.datetime + datetime.timedelta(minutes=5) > timezone.now():
+		return HttpResponseRedirect(reverse('stepupmountains:not_so_quickly'))
+			
 	climb = Climb(user=request.user, climbed_object=climbed_object)
 	climb.save()
 	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
