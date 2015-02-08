@@ -12,11 +12,14 @@ from django.core.urlresolvers import reverse
 
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
-	all_objects = ClimbingObject.objects.get_user_objects(request.user)
+	all_objects = []
+	all_climbs = []
 	total_climbed=0
-	all_climbs = Climb.objects.get_user_objects(request.user)
-	for climb in all_climbs:
-		total_climbed += climb.climbed_object.height
+	if request.user.is_authenticated():
+		all_objects = ClimbingObject.objects.get_user_objects(request.user)
+		all_climbs = Climb.objects.get_user_objects(request.user)
+		for climb in all_climbs:
+			total_climbed += climb.climbed_object.height
 
 	context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': total_climbed}
 	return render(request, 'stepupmountains/mountain_list.html', context)

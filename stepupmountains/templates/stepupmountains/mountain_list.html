@@ -5,16 +5,20 @@
 <link rel="stylesheet" type="text/css" href="{% static 'stepupmountains/style.css' %}" />
 </head>
 <body>
-{% if object_list %}
-	{% for object in object_list %}
-		<form action="{% url 'stepupmountains:climb_object' %}" method="POST">
-		{% csrf_token %}
-		<input type="hidden" name="climbed_object" id="climbed_object" value="{{ object.id }}" />
-		<input type="submit" name="Climb" id="climb_button" value="Climb {{ object.name }}" />
-		</form>
-	{% endfor %}
-{% endif %}
+{% if user.is_authenticated %}
+	{% if object_list %}
+		{% for object in object_list %}
+			<form action="{% url 'stepupmountains:climb_object' %}" method="POST">
+			{% csrf_token %}
+			<input type="hidden" name="climbed_object" id="climbed_object" value="{{ object.id }}" />
+			<input type="submit" name="Climb" id="climb_button" value="Climb {{ object.name }}" />
+			</form>
+		{% endfor %}
+	{% endif %}
 <p>Total ascent: <b>{{total_climbed}}</b> meters.</p>
+{% else %}
+<p>Login to be able to track your ascent</p>
+{% endif %}
 {% if mountain_list %}
 	<table>
 		{% for mountain in mountain_list %}
