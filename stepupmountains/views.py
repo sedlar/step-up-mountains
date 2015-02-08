@@ -12,9 +12,9 @@ from django.core.urlresolvers import reverse
 
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
-	all_objects = ClimbingObject.objects.all();
+	all_objects = ClimbingObject.objects.get_user_objects(request.user)
 	total_climbed=0
-	all_climbs = Climb.objects.all();
+	all_climbs = Climb.objects.get_user_objects(request.user)
 	for climb in all_climbs:
 		total_climbed += climb.climbed_object.height
 
