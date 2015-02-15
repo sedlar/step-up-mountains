@@ -7,10 +7,11 @@
 </head>
 
 <body>
+<div id="side">
     <div id="account">
 {% if user.is_authenticated %}
-	<p>User: {{ user.get_username }}</p>
-	<p><a href="{% url 'stepupmountains:auth_logout' %}">Logout</a></p>
+	<p>User: {{ user.get_username }}<br />
+	<a href="{% url 'stepupmountains:auth_logout' %}">Logout</a></p>
 {% else %}
 	<form action="{% url 'stepupmountains:auth_login' %}" method="POST">
 		{% csrf_token %}
@@ -30,6 +31,7 @@
         </ul>
         {% endblock %}
     </div>
+</div>
 
     <div id="content">
         {% block content %}{% endblock %}

@@ -10,3 +10,7 @@ table, th, td {
 #odd_Climbed { background-color: #009900 }
 #even_NotClimbed { background-color: #CCCCCC }
 #odd_NotClimbed { background-color: #AAAAAA }
+
+#account { text-align: right }
+#side { float: right; }
+#elevation { text-align: right }
