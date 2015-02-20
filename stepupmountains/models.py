@@ -15,6 +15,9 @@ class Mountain(models.Model):
 	def __str__(self):
 		return self.name + ' (' + str(self.elevation) + ' m.n.m.)'
 
+	def __unicode__(self):
+		return self.name + ' (' + str(self.elevation) + ' m.n.m.)'
+
 class UserManager(models.Manager):
     def get_user_objects(self, logged_user):
         return super(UserManager, self).get_query_set().filter(user=logged_user)
