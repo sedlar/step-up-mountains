@@ -63,10 +63,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'stepupmountains',
-        'USER': OPENSHIFT_POSTGRESQL_DB_USERNAME,
-        'PASSWORD': OPENSHIFT_POSTGRESQL_DB_PASSWORD,
-        'HOST': OPENSHIFT_POSTGRESQL_DB_HOST,
-        'PORT': OPENSHIFT_POSTGRESQL_DB_PORT,
+        'USER': os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME'],
+        'PASSWORD': os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD'],
+        'HOST': os.environ['OPENSHIFT_POSTGRESQL_DB_HOST'],
+        'PORT': os.environ['OPENSHIFT_POSTGRESQL_DB_PORT'],
     }
 }
 
