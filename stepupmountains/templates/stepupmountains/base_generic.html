@@ -27,7 +27,9 @@
         {% block sidebar %}
         <ul>
             <li><a href="/">Home</a></li>
+{% if user.is_authenticated %}
             <li><a href="/add_object/">Add climbing object</a></li>
+{% endif %}
         </ul>
         {% endblock %}
     </div>
