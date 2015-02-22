@@ -52,7 +52,7 @@ def auth_login(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
-			if request.META['HTTP_REFERER']:
+			if request.META['HTTP_REFERER'] and request.META['HTTP_REFERER'] == reverse('stepupmountains:login_failed'):
 				return HttpResponseRedirect(request.META['HTTP_REFERER'])
 			else:
 				return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
