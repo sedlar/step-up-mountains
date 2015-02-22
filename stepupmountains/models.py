@@ -25,7 +25,7 @@ class UserManager(models.Manager):
 class ClimbingObject(models.Model):
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=200)
-	height = models.IntegerField()
+	height = models.FloatField()
 	objects = UserManager()
 	def __str__(self):
 		return self.name
