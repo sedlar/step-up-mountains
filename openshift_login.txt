@@ -1,0 +1,6 @@
+Gears:          Located with python-2.7
+  Connection URL: postgresql://$OPENSHIFT_POSTGRESQL_DB_HOST:$OPENSHIFT_POSTGRESQL_DB_PORT
+  Database Name:  stepupmountains
+  Password:       JW5z-CeYdUQM
+  Username:       adminww2xrxf
+
