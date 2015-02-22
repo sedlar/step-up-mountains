@@ -24,7 +24,7 @@ def add_object_do(request):
 		return HttpResponseForbidden('You need to log in before adding objects')
 	object_name = request.POST['object_name']
 	object_height = request.POST['object_height']
-	if not object_name or not re.match("^[0-9]+$", object_height):
+	if not object_name or not re.match("^[0-9]+(\.[0-9]+)?$", object_height):
 		return HttpResponseRedirect(reverse('stepupmountains:add_object'))
 	climbing_object = ClimbingObject(user = request.user, name = object_name, height = object_height)
 	climbing_object.save()
