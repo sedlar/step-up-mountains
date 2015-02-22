@@ -8,6 +8,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+import os
+
+ON_OPENSHIFT = False
+if os.environ.has_key('OPENSHIFT_REPO_DIR'):
+	ON_OPENSHIFT = True
+if os.environ.has_key('OPENSHIFT_APP_NAME'):
+	DB_NAME = os.environ['OPENSHIFT_APP_NAME']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_USERNAME'):
+	DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_PASSWORD'):
+	DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_HOST'):
+	DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_PORT'):
+	DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -58,24 +74,41 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+if os.environ.has_key('OPENSHIFT_REPO_DIR'):
+	ON_OPENSHIFT = True
+if os.environ.has_key('OPENSHIFT_APP_NAME'):
+	DB_NAME = os.environ['OPENSHIFT_APP_NAME']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_USERNAME'):
+	DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_PASSWORD'):
+	DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_HOST'):
+	DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_PORT'):
+	DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'stepupmountains',
-        'USER': os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME'],
-        'PASSWORD': os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD'],
-        'HOST': os.environ['OPENSHIFT_POSTGRESQL_DB_HOST'],
-        'PORT': os.environ['OPENSHIFT_POSTGRESQL_DB_PORT'],
-    }
-}
-
-#DATABASES = {
-    #'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #}
-#}
+if ON_OPENSHIFT:
+	DATABASES = {
+    	'default': {
+        	'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        	'NAME': 'stepupmountains',
+        	'USER': os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME'],
+        	'PASSWORD': os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD'],
+        	'HOST': os.environ['OPENSHIFT_POSTGRESQL_DB_HOST'],
+        	'PORT': os.environ['OPENSHIFT_POSTGRESQL_DB_PORT'],
+    	}
+	}
+else:
+	DATABASES = {
+    	'default': {
+        	'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        	'NAME': 'stepupmountains',
+        	'USER': 'stepupmountains',
+        	'PASSWORD': 'elbrus',
+        	'HOST': 'localhost',
+        	'PORT': '5432',
+    	}
+	}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
