@@ -77,7 +77,7 @@ def get_total_ascent(user):
 	all_climbs = get_all_climbs(user)
 	for climb in all_climbs:
 		total_climbed += climb.climbed_object.height
-	return total_climbed
+	return round(total_climbed, 1)
 
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
