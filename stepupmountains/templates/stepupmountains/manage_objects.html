@@ -1,0 +1,11 @@
+{% extends "stepupmountains/base_generic.html" %}
+{% block title %}Step Up Mountains - Manage objects{% endblock %}
+{% block content %}
+	{% if objects %}
+		{% for object in objects %}
+			{{ object.id }} - {{ object.name }}<br \>
+		{% endfor %}
+	{% else %}
+		<p><b><a href="{% url 'stepupmountains:manageobjects:add_object' %}">Add some object to climb first.</a></b></p>
+	{% endif %}
+{% endblock %}

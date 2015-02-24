@@ -28,7 +28,7 @@
         <ul>
             <li><a href="/">Home</a></li>
 {% if user.is_authenticated %}
-            <li><a href="{% url 'stepupmountains:manage-objects:add' %}">Add climbing object</a></li>
+            <li><a href="{% url 'stepupmountains:manageobjects:manageobjects' %}">Manage objects</a></li>
 {% endif %}
         </ul>
         {% endblock %}

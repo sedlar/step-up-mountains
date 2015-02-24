@@ -13,6 +13,7 @@ from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
+from objects import get_all_objects
 
 # Create your views here.
 def add(request):
@@ -21,9 +22,15 @@ def add(request):
 	else:
 		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
 
-def edit(request):
+def edit(request, object_id):
 	return HttpResponseForbidden('Not implemented')
 
-def list_all(request):
-	return HttpResponseForbidden('Not implemented')
+def manageobjects(request):
+	if request.user.is_authenticated():
+		objects = get_all_objects(request.user)
+		context = {'objects': objects}
+		return render(request, 'stepupmountains/manage_objects.html', context)
+	else:
+		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+
 

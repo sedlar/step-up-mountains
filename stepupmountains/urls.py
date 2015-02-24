@@ -4,7 +4,7 @@ from stepupmountains import views
 
 urlpatterns = patterns(
 	'',
-	url(r'manage-objects/', include('stepupmountains.manage-objects.urls', namespace="manage-objects")),
+	url(r'manage-objects/', include('stepupmountains.manageobjects.urls', namespace="manageobjects")),
 	url(r'climb/$', views.climb_object, name='climb_object'),
 	url(r'login/$', views.auth_login, name='auth_login'),
 	url(r'logout/$', views.auth_logout, name='auth_logout'),
