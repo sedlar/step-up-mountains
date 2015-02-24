@@ -19,27 +19,6 @@ import re
 def not_so_quickly(request):
 	return render(request, 'stepupmountains/not_so_quickly.html')
 
-def add_object_do(request):
-	if not request.user.is_authenticated():
-		return HttpResponseForbidden('You need to log in before adding objects')
-	object_name = request.POST['object_name']
-	object_height = request.POST['object_height']
-	if not object_name or not re.match("^[0-9]+(\.[0-9]+)?$", object_height):
-		return HttpResponseRedirect(reverse('stepupmountains:add_object'))
-	climbing_object = ClimbingObject(user = request.user, name = object_name, height = object_height)
-	climbing_object.save()
-	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-
-		
-
-
-def add_object(request):
-	if request.user.is_authenticated():
-		return render(request, 'stepupmountains/add_object_form.html')
-	else:
-		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-	
-
 def login_failed(request):
 	return render(request, 'stepupmountains/login_failed.html')
 
