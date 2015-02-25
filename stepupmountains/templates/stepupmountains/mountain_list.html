@@ -14,7 +14,7 @@
 	{% endfor %}
 {% else %}
 	{% if user.is_authenticated %}
-	<p><b><a href="{% url 'stepupmountains:add_object' %}">Add some object to climb first.</a></b></p>
+	<p><b><a href="{% url 'stepupmountains:manageobjects:add' %}">Add some object to climb first.</a></b></p>
 	{% endif %}
 {% endif %}
 
