@@ -43,13 +43,21 @@ def edit(request):
 	climbing_object.save()
 	return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
 
-def delete(request):
+def changeactivestatus(request, object_id):
+	if not request.user.is_authenticated():
+		return HttpResponseForbidden('You need to log in before changing activity status')
+	changed_object = get_object_by_id(request.user, object_id)
+	if changed_object.active:
+		changed_object.active = False
+		changed_object.order = get_max_object_order(request.user) + 1
+	else:
+		changed_object.active = True
+	changed_object.save()
+	return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+
+def changeorder(request):
+	if not request.user.is_authenticated():
+		return HttpResponseForbidden('You need to log in before changing order')
 	return HttpResponseForbidden('Not implemented')
 
-def activate(request):
-	return HttpResponseForbidden('Not implemented')
-
-def deactivate(request):
-	return HttpResponseForbidden('Not implemented')
-
-
+		

@@ -12,7 +12,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 import datetime
 from datetime import timedelta
-import re
 from objects import get_all_objects, get_object_by_id
 
 # Create your views here.
@@ -35,7 +34,12 @@ def edit(request, object_id):
 def manageobjects(request):
 	if request.user.is_authenticated():
 		objects = get_all_objects(request.user)
-		context = {'objects': objects}
+		for climbing_object in objects:
+			if climbing_object.active:
+				climbing_object.link_text = "Deactivate"
+			else:
+				climbing_object.link_text = "Activate"	
+		context = {'active_objects': objects.filter(active=True), 'not_active_objects': objects.filter(active=False)}
 		return render(request, 'stepupmountains/manage_objects.html', context)
 	else:
 		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))

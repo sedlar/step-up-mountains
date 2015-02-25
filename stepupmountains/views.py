@@ -13,7 +13,7 @@ from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
-from objects import get_object_by_id
+from objects import get_object_by_id, get_all_active_objects
 
 # Create your views here.
 
@@ -39,12 +39,6 @@ def auth_login(request):
 				
 	return HttpResponseRedirect(reverse('stepupmountains:login_failed'))
 
-def get_all_objects(user):
-	all_objects = []
-	if user.is_authenticated():
-		all_objects = ClimbingObject.objects.get_user_objects(user)
-	return all_objects
-
 def get_all_climbs(user):
 	all_climbs = []
 	if user.is_authenticated():
@@ -61,7 +55,7 @@ def get_total_ascent(user):
 
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
-	all_objects = get_all_objects(request.user)
+	all_objects = get_all_active_objects(request.user)
 	total_climbed = get_total_ascent(request.user)
 	for mountain in all_mountains:
 		mountain.climbed = Mountain.is_climbed(mountain, total_climbed)
