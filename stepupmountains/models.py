@@ -40,6 +40,9 @@ class ClimbingObject(models.Model):
 	def __str__(self):
 		return self.name
 
+	def __unicode__(self):
+		return self.name
+
 class Climb(models.Model):
 	user = models.ForeignKey(User)
 	climbed_object = models.ForeignKey(ClimbingObject)

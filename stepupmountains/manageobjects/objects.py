@@ -2,10 +2,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from stepupmountains.models import ClimbingObject
 
+def get_max_object_order(user):
+	all_objects = []
+	if user.is_authenticated():
+		latest_object = ClimbingObject.objects.get_user_objects(user).extra(order_by = ['-order']).first()
+	if latest_object:
+		return latest_object.order
+	else:
+		return 0
+
 def get_all_objects(user):
 	all_objects = []
 	if user.is_authenticated():
-		all_objects = ClimbingObject.objects.get_user_objects(user)
+		all_objects = ClimbingObject.objects.get_user_objects(user).extra(order_by = ['order'])
 	return all_objects
 
 def get_object_by_id(user, object_id):
