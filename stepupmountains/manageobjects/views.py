@@ -13,17 +13,24 @@ from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
-from objects import get_all_objects
+from objects import get_all_objects, get_object_by_id
 
 # Create your views here.
 def add(request):
 	if request.user.is_authenticated():
 		return render(request, 'stepupmountains/add_object_form.html')
 	else:
-		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'), context)
 
 def edit(request, object_id):
-	return HttpResponseForbidden('Not implemented')
+	if request.user.is_authenticated():
+		edited_object = get_object_by_id(request.user, object_id)
+		if not edited_object:
+			return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+		context = { 'edited_object': edited_object }
+		return render(request, 'stepupmountains/add_object_form.html', context)
+	else:
+		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
 
 def manageobjects(request):
 	if request.user.is_authenticated():

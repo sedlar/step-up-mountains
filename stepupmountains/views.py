@@ -13,6 +13,7 @@ from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
+from objects import get_object_by_id
 
 # Create your views here.
 
@@ -70,7 +71,7 @@ def mountain_list(request):
 def climb_object(request):
 	if not request.user.is_authenticated():
 		return HttpResponseForbidden('Login before climbing')	
-	climbed_object = get_object_or_404(ClimbingObject, pk=request.POST['climbed_object'])
+	climbed_object = get_user_object_by_id(request.user, request.POST['climbed_object'])
 	if request.user != climbed_object.user:
 		return HttpResponseForbidden('You are not allowed to climb this object')
 

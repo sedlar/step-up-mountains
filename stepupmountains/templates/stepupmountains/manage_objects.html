@@ -1,10 +1,22 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Step Up Mountains - Manage objects{% endblock %}
 {% block content %}
+	<div><a href="{% url 'stepupmountains:manageobjects:add' %}">Add objects</a></div>
 	{% if objects %}
+		<table>
 		{% for object in objects %}
-			{{ object.id }} - {{ object.name }}<br \>
+			<tr>
+				<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
+				<td>{{ object.height }} m. n. m.</td>
+				<td>
+					<form method="POST" action="">
+						<input type="hidden" name="id" value="{{ object.id }}" />
+						<input type="button" name="action" value="Activate" />
+					</form>
+				</td>
+			</tr>
 		{% endfor %}
+		</table>
 	{% else %}
 		<p><b><a href="{% url 'stepupmountains:manageobjects:add_object' %}">Add some object to climb first.</a></b></p>
 	{% endif %}

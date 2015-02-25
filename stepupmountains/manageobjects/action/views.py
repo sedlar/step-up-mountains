@@ -13,6 +13,7 @@ from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
+from objects import get_object_by_id
 
 # Create your views here.
 
@@ -22,13 +23,24 @@ def add(request):
 	object_name = request.POST['object_name']
 	object_height = request.POST['object_height']
 	if not object_name or not re.match("^[0-9]+(\.[0-9]+)?$", object_height):
-		return HttpResponseRedirect(reverse('stepupmountains:add_object'))
+		return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
 	climbing_object = ClimbingObject(user = request.user, name = object_name, height = object_height)
 	climbing_object.save()
-	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+	return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
 
 def edit(request):
-	return HttpResponseForbidden('Not implemented')
+	if not request.user.is_authenticated():
+		return HttpResponseForbidden('You need to log in before editing objects')
+	object_name = request.POST['object_name']
+	object_height = request.POST['object_height']
+	object_id = request.POST['object_id']
+	if not object_name or not re.match("^[0-9]+(\.[0-9]+)?$", object_height) or not re.match("^[0-9]+$", object_id):
+		return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+	climbing_object = get_object_by_id(request.user, object_id)
+	climbing_object.name = object_name
+	climbing_object.height = object_height
+	climbing_object.save()
+	return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
 
 def delete(request):
 	return HttpResponseForbidden('Not implemented')

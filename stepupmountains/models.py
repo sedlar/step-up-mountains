@@ -19,8 +19,16 @@ class Mountain(models.Model):
 		return self.name + ' (' + str(self.elevation) + ' m.n.m.)'
 
 class UserManager(models.Manager):
-    def get_user_objects(self, logged_user):
-        return super(UserManager, self).get_query_set().filter(user=logged_user)
+    def get_user_objects(self, owner):
+        return super(UserManager, self).get_queryset().filter(user=owner)
+	
+    def get_user_object_by_id(self, owner, object_id):
+	selected_objects = super(UserManager, self).get_queryset().filter(user=owner, id=object_id)
+	if len(selected_objects)>0:
+		return selected_objects[0]
+	else:
+		return None
+		
 
 class ClimbingObject(models.Model):
 	user = models.ForeignKey(User)
