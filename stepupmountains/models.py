@@ -35,7 +35,7 @@ class ClimbingObject(models.Model):
 	name = models.CharField(max_length=200)
 	height = models.FloatField()
 	active = models.BooleanField(default=True)
-	order = models.IntegerField(default=0)
+	order = models.IntegerField()
 	objects = UserManager()
 	def __str__(self):
 		return self.name
