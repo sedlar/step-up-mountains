@@ -21,7 +21,7 @@
 {% if mountain_list %}
 	<table>
 		{% for mountain in mountain_list %}
-			<tr id='{% cycle 'odd' 'even' %}_{{mountain.climbed}}'><td>{{mountain.name}}</td><td id="elevation">{{mountain.elevation}} m.n.m.</td><td>{{mountain.comment}}</td></tr>
+			<tr id='{% cycle 'odd' 'even' %}_{{mountain.climbed}}'><td>{{mountain.name}}</td><td id="elevation">{{mountain.elevation}} m. n. m.</td><td>{{mountain.comment}}</td></tr>
 		{% endfor %}
 	</table>
 {% else %}

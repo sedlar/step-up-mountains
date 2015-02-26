@@ -8,7 +8,7 @@
 	{% for object in active_objects %}
 		<tr>
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
-			<td>{{ object.height }} m. n. m.</td>
+			<td>{{ object.height }} m</td>
 			<td><a href="{% url 'stepupmountains:manageobjects:action:changeactivestatus' object.id %}">Deactivate</a></td>
 			<td><input type="text" name="{{ object.id }}" value="{{ forloop.counter }}"></td>
 		</tr>
@@ -21,7 +21,7 @@
 	{% for object in not_active_objects %}
 		<tr>
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
-			<td>{{ object.height }} m. n. m.</td>
+			<td>{{ object.height }} m</td>
 			<td><a href="{% url 'stepupmountains:manageobjects:action:changeactivestatus' object.id %}">Activate</a></td>
 		</tr>
 	{% endfor %}
