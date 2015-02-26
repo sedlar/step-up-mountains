@@ -24,6 +24,7 @@ if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_HOST'):
 if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_PORT'):
 	DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -140,3 +141,11 @@ STATICFILES_FINDERS = (
 ## Don't forget to use absolute paths, not relative paths.
 #os.path.join(BASE_DIR,"static"),
 #)
+
+import sys
+import os
+sys.path.append(os.path.join(os.getcwd(), "stepupmountains/manageobjects/"))
+if DEBUG:
+	from pprint import pprint as p
+	print p(sys.path)
+
