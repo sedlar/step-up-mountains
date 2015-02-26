@@ -58,6 +58,17 @@ def changeactivestatus(request, object_id):
 def changeorder(request):
 	if not request.user.is_authenticated():
 		return HttpResponseForbidden('You need to log in before changing order')
-	return HttpResponseForbidden('Not implemented')
+
+	for order_data in request.POST.items():
+		if re.match("^[0-9]+$", order_data[0]):
+			changed_object = get_object_by_id(request.user, order_data[0])
+			if re.match("^[0-9]+$", order_data[1]):
+				changed_object.order = order_data[1]
+				changed_object.save()
+			else:
+				changed_object.order = 9999999
+				changed_object.save()
+			
+	return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
 
 		

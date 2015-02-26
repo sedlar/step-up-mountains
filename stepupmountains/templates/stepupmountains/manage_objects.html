@@ -10,7 +10,7 @@
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
 			<td>{{ object.height }} m. n. m.</td>
 			<td><a href="{% url 'stepupmountains:manageobjects:action:changeactivestatus' object.id %}">Deactivate</a></td>
-			<td><input type="text" name="order_{{ object.id }}" value="{{ forloop.counter }}"></td>
+			<td><input type="text" name="{{ object.id }}" value="{{ forloop.counter }}"></td>
 		</tr>
 	{% endfor %}
 	</table>
