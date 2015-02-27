@@ -13,32 +13,12 @@ from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
+from objects import get_object_by_id, get_all_active_objects
 
 # Create your views here.
 
 def not_so_quickly(request):
 	return render(request, 'stepupmountains/not_so_quickly.html')
-
-def add_object_do(request):
-	if not request.user.is_authenticated():
-		return HttpResponseForbidden('You need to log in before adding objects')
-	object_name = request.POST['object_name']
-	object_height = request.POST['object_height']
-	if not object_name or not re.match("^[0-9]+(\.[0-9]+)?$", object_height):
-		return HttpResponseRedirect(reverse('stepupmountains:add_object'))
-	climbing_object = ClimbingObject(user = request.user, name = object_name, height = object_height)
-	climbing_object.save()
-	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-
-		
-
-
-def add_object(request):
-	if request.user.is_authenticated():
-		return render(request, 'stepupmountains/add_object_form.html')
-	else:
-		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-	
 
 def login_failed(request):
 	return render(request, 'stepupmountains/login_failed.html')
@@ -59,12 +39,6 @@ def auth_login(request):
 				
 	return HttpResponseRedirect(reverse('stepupmountains:login_failed'))
 
-def get_all_objects(user):
-	all_objects = []
-	if user.is_authenticated():
-		all_objects = ClimbingObject.objects.get_user_objects(user)
-	return all_objects
-
 def get_all_climbs(user):
 	all_climbs = []
 	if user.is_authenticated():
@@ -81,7 +55,7 @@ def get_total_ascent(user):
 
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
-	all_objects = get_all_objects(request.user)
+	all_objects = get_all_active_objects(request.user)
 	total_climbed = get_total_ascent(request.user)
 	for mountain in all_mountains:
 		mountain.climbed = Mountain.is_climbed(mountain, total_climbed)
@@ -91,7 +65,7 @@ def mountain_list(request):
 def climb_object(request):
 	if not request.user.is_authenticated():
 		return HttpResponseForbidden('Login before climbing')	
-	climbed_object = get_object_or_404(ClimbingObject, pk=request.POST['climbed_object'])
+	climbed_object = get_user_object_by_id(request.user, request.POST['climbed_object'])
 	if request.user != climbed_object.user:
 		return HttpResponseForbidden('You are not allowed to climb this object')
 

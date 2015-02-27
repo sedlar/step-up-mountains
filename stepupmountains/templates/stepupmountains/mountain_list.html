@@ -14,14 +14,14 @@
 	{% endfor %}
 {% else %}
 	{% if user.is_authenticated %}
-	<p><b><a href="{% url 'stepupmountains:add_object' %}">Add some object to climb first.</a></b></p>
+	<p><b><a href="{% url 'stepupmountains:manageobjects:add' %}">Add some object to climb first.</a></b></p>
 	{% endif %}
 {% endif %}
 
 {% if mountain_list %}
 	<table>
 		{% for mountain in mountain_list %}
-			<tr id='{% cycle 'odd' 'even' %}_{{mountain.climbed}}'><td>{{mountain.name}}</td><td id="elevation">{{mountain.elevation}} m.n.m.</td><td>{{mountain.comment}}</td></tr>
+			<tr id='{% cycle 'odd' 'even' %}_{{mountain.climbed}}'><td>{{mountain.name}}</td><td id="elevation">{{mountain.elevation}} m. n. m.</td><td>{{mountain.comment}}</td></tr>
 		{% endfor %}
 	</table>
 {% else %}
