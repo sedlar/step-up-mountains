@@ -144,7 +144,11 @@ STATICFILES_FINDERS = (
 
 import sys
 import os
-sys.path.append(os.path.join(os.getcwd(), "stepupmountains/manageobjects/"))
+if ON_OPENSHIFT:
+	sys.path.append(os.path.join(os.getcwd(), "app-root/repo/stepupmountains/manageobjects/"))
+else:
+	sys.path.append(os.path.join(os.getcwd(), "stepupmountains/manageobjects/"))
+
 if DEBUG:
 	from pprint import pprint as p
 	print p(sys.path)
