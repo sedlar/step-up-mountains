@@ -135,6 +135,8 @@ STATICFILES_FINDERS = (
 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+LOGIN_URL = '/'
+
 #STATICFILES_DIRS = (
 ## Put strings here, like "/home/html/static" or "C:/www/django/static".
 ## Always use forward slashes, even on Windows.
