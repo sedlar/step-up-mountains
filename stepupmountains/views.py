@@ -6,53 +6,24 @@ from stepupmountains.models import Climb
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-from django.http import HttpResponseForbidden
 from django.core.urlresolvers import reverse
-from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
 from objects import get_object_by_id, get_all_active_objects
+from django.contrib.auth.decorators import login_required
+from stepupmountains.climbs import get_total_ascent
+from django.views.decorators.http import require_GET, require_POST
 
 # Create your views here.
 
+@require_GET
+@login_required
 def not_so_quickly(request):
 	return render(request, 'stepupmountains/not_so_quickly.html')
 
-def login_failed(request):
-	return render(request, 'stepupmountains/login_failed.html')
-
-def auth_logout(request):
-	logout(request)
-	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-
-def auth_login(request):
-	user = authenticate(username=request.POST['username'], password=request.POST['password'])
-	if user is not None:
-		if user.is_active:
-			login(request, user)
-			if request.META['HTTP_REFERER'] and request.META['HTTP_REFERER'] == reverse('stepupmountains:login_failed'):
-				return HttpResponseRedirect(request.META['HTTP_REFERER'])
-			else:
-				return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-				
-	return HttpResponseRedirect(reverse('stepupmountains:login_failed'))
-
-def get_all_climbs(user):
-	all_climbs = []
-	if user.is_authenticated():
-		all_climbs = Climb.objects.get_user_objects(user)
-	return all_climbs
-
-
-def get_total_ascent(user):
-	total_climbed=0
-	all_climbs = get_all_climbs(user)
-	for climb in all_climbs:
-		total_climbed += climb.climbed_object.height
-	return round(total_climbed, 1)
-
+@require_GET
 def mountain_list(request):
 	all_mountains = Mountain.objects.order_by('-elevation');
 	all_objects = get_all_active_objects(request.user)
@@ -62,9 +33,12 @@ def mountain_list(request):
 	context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': total_climbed}
 	return render(request, 'stepupmountains/mountain_list.html', context)
 
+@require_POST
+@require_login
 def climb_object(request):
-	if not request.user.is_authenticated():
-		return HttpResponseForbidden('Login before climbing')	
+	if not re.match("^[0-9]+$", request.POST['climbed_object']):
+		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+		
 	climbed_object = get_object_by_id(request.user, request.POST['climbed_object'])
 	if request.user != climbed_object.user:
 		return HttpResponseForbidden('You are not allowed to climb this object')

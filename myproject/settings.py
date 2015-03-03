@@ -135,6 +135,8 @@ STATICFILES_FINDERS = (
 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+LOGIN_URL = '/'
+
 #STATICFILES_DIRS = (
 ## Put strings here, like "/home/html/static" or "C:/www/django/static".
 ## Always use forward slashes, even on Windows.
@@ -143,12 +145,15 @@ STATICFILES_FINDERS = (
 #)
 
 import sys
-import os
 if ON_OPENSHIFT:
-	sys.path.append(os.path.join(os.getcwd(), "app-root/repo/stepupmountains/manageobjects/"))
+	path = "app-root/repo/"
 else:
-	sys.path.append(os.path.join(os.getcwd(), "stepupmountains/manageobjects/"))
+	path = ""
 
+sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/"))
+sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/accounts/"))
+
+LOGIN_URL = 'stepupmountains:accounts:django.contrib.auth.views.login'
 if DEBUG:
 	from pprint import pprint as p
 	print p(sys.path)

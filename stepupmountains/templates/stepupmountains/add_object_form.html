@@ -3,7 +3,7 @@
 {% block content %}
     {% load staticfiles %}
     <script src="{% static 'stepupmountains/validateAddObjectForm.js' %}"></script> 
-	<form action="{% if edited_object %}{% url 'stepupmountains:manageobjects:action:edit'%}{% else %}{% url 'stepupmountains:manageobjects:action:add' %}{% endif %}" method="POST" name="add_object" onsubmit="return validateAddObjectForm()">
+	<form action="{% if edited_object %}{% url 'stepupmountains:manageobjects:edit'%}{% else %}{% url 'stepupmountains:manageobjects:add' %}{% endif %}" method="POST" name="add_object" onsubmit="return validateAddObjectForm()">
 		{% csrf_token %}
 		{% if edited_object %}
 			<input type="hidden" name="object_id" value="{{ edited_object.id }}" />

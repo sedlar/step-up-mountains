@@ -2,14 +2,14 @@
 {% block title %}Step Up Mountains - Manage objects{% endblock %}
 {% block content %}
 	<div><a href="{% url 'stepupmountains:manageobjects:add' %}">Add objects</a></div>
-	<form method="POST" action="{% url 'stepupmountains:manageobjects:action:changeorder' %}">
+	<form method="POST" action="{% url 'stepupmountains:manageobjects:changeorder' %}">
 	{% csrf_token %}
 	<table>
 	{% for object in active_objects %}
 		<tr>
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
 			<td>{{ object.height }} m</td>
-			<td><a href="{% url 'stepupmountains:manageobjects:action:changeactivestatus' object.id %}">Deactivate</a></td>
+			<td><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Deactivate</a></td>
 			<td><input type="text" name="{{ object.id }}" value="{{ forloop.counter }}"></td>
 		</tr>
 	{% endfor %}
@@ -22,7 +22,7 @@
 		<tr>
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
 			<td>{{ object.height }} m</td>
-			<td><a href="{% url 'stepupmountains:manageobjects:action:changeactivestatus' object.id %}">Activate</a></td>
+			<td><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Activate</a></td>
 		</tr>
 	{% endfor %}
 	</table>
