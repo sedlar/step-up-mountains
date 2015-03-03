@@ -19,6 +19,7 @@ from django.views.decorators.http import require_GET, require_POST
 # Create your views here.
 
 @require_GET
+@login_required
 def not_so_quickly(request):
 	return render(request, 'stepupmountains/not_so_quickly.html')
 
@@ -33,6 +34,7 @@ def mountain_list(request):
 	return render(request, 'stepupmountains/mountain_list.html', context)
 
 @require_POST
+@require_login
 def climb_object(request):
 	if not request.user.is_authenticated():
 		return HttpResponseForbidden('Login before climbing')	
