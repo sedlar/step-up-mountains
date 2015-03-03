@@ -147,9 +147,12 @@ LOGIN_URL = '/'
 import sys
 import os
 if ON_OPENSHIFT:
-	sys.path.append(os.path.join(os.getcwd(), "app-root/repo/stepupmountains/manageobjects/"))
+	path = "app-root/repo/"
 else:
-	sys.path.append(os.path.join(os.getcwd(), "stepupmountains/manageobjects/"))
+	path = ""
+
+sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/"))
+sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/accounts/"))
 
 if DEBUG:
 	from pprint import pprint as p

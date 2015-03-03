@@ -6,9 +6,7 @@ from stepupmountains.models import Climb
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-from django.http import HttpResponseForbidden
 from django.core.urlresolvers import reverse
-from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 import datetime
 from datetime import timedelta
@@ -23,28 +21,6 @@ from django.views.decorators.http import require_GET, require_POST
 @require_GET
 def not_so_quickly(request):
 	return render(request, 'stepupmountains/not_so_quickly.html')
-
-@require_GET
-def login_failed(request):
-	return render(request, 'stepupmountains/login_failed.html')
-
-@require_GET
-def auth_logout(request):
-	logout(request)
-	return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-
-@require_POST
-def auth_login(request):
-	user = authenticate(username=request.POST['username'], password=request.POST['password'])
-	if user is not None:
-		if user.is_active:
-			login(request, user)
-			if request.META['HTTP_REFERER'] and request.META['HTTP_REFERER'] == reverse('stepupmountains:login_failed'):
-				return HttpResponseRedirect(request.META['HTTP_REFERER'])
-			else:
-				return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-				
-	return HttpResponseRedirect(reverse('stepupmountains:login_failed'))
 
 @require_GET
 def mountain_list(request):

@@ -11,17 +11,10 @@
     <div id="account">
 {% if user.is_authenticated %}
 	<p>User: {{ user.get_username }}<br />
-	<a href="{% url 'stepupmountains:auth_logout' %}">Logout</a></p>
+	<a href="{% url 'stepupmountains:accounts:auth_logout' %}">Logout</a></p>
 {% else %}
-	<form action="{% url 'stepupmountains:auth_login' %}" method="POST">
-		{% csrf_token %}
-		Username: <input type="text" name="username" id="username" value="" /><br />
-		Password: <input type="password" name="password" id="password" value="" /><br />
-		<input type="submit" name="Login" id="login" value="Login" />
-	</form>
-
+	<a href="{% url 'stepupmountains:accounts:auth_login' %}">Login</a></p>
 {% endif %}
-
     </div>
     <div id="sidebar">
         {% block sidebar %}
