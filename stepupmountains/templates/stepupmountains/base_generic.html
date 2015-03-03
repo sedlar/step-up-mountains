@@ -13,7 +13,7 @@
 	<p>User: {{ user.get_username }}<br />
 	<a href="{% url 'stepupmountains:accounts:auth_logout' %}">Logout</a></p>
 {% else %}
-	<a href="{% url 'stepupmountains:accounts:auth_login' %}">Login</a></p>
+	<a href="{% url 'stepupmountains:accounts:django.contrib.auth.views.login' %}">Login</a></p>
 {% endif %}
     </div>
     <div id="sidebar">

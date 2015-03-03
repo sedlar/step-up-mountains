@@ -145,7 +145,6 @@ LOGIN_URL = '/'
 #)
 
 import sys
-import os
 if ON_OPENSHIFT:
 	path = "app-root/repo/"
 else:
@@ -154,6 +153,7 @@ else:
 sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/"))
 sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/accounts/"))
 
+LOGIN_URL = 'stepupmountains:accounts:django.contrib.auth.views.login'
 if DEBUG:
 	from pprint import pprint as p
 	print p(sys.path)
