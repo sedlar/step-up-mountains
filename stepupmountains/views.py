@@ -13,8 +13,9 @@ from datetime import timedelta
 import re
 from objects import get_object_by_id, get_all_active_objects
 from django.contrib.auth.decorators import login_required
-from stepupmountains.climbs import get_total_ascent
+from stepupmountains.climbs import get_total_ascent, get_all_climbs
 from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 
@@ -33,9 +34,12 @@ def mountain_list(request):
 	context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': total_climbed}
 	return render(request, 'stepupmountains/mountain_list.html', context)
 
-@require_POST
-@require_login
+@require_http_methods(['GET', 'POST'])
+@login_required
 def climb_object(request):
+	if request.method == 'GET':
+		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+		
 	if not re.match("^[0-9]+$", request.POST['climbed_object']):
 		return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
 		
