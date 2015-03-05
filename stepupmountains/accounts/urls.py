@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, include, url
-from stepupmountains.accounts import views
 import django.contrib.auth.views
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
