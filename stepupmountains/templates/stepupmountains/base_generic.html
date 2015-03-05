@@ -11,10 +11,11 @@
     <div id="account">
 {% if user.is_authenticated %}
 	<p>User: {{ user.get_username }}<br />
-	<a href="{% url 'stepupmountains:accounts:django.contrib.auth.views.logout' %}">Logout</a></p>
+	<a href="{% url 'stepupmountains:accounts:change_password' %}">Change Password</a>/
+    <a href="{% url 'stepupmountains:accounts:django.contrib.auth.views.logout' %}">Logout</a></p>
 {% else %}
-	<a href="{% url 'stepupmountains:accounts:login' %}">Login</a></p>
-	<a href="{% url 'stepupmountains:accounts:register' %}">Register</a></p>
+	<p><a href="{% url 'stepupmountains:accounts:login' %}">Login</a></p>
+	<p><a href="{% url 'stepupmountains:accounts:register' %}">Register</a></p>
 {% endif %}
     </div>
     <div id="sidebar">
