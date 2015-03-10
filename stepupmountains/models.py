@@ -8,9 +8,7 @@ class Mountain(models.Model):
     elevation = models.IntegerField()
     comment = models.CharField(max_length=1000)
     def is_climbed(self, ascent):
-        if ascent >= self.elevation:
-            return 'Climbed'
-        return 'NotClimbed'
+        return ascent >= self.elevation
 
     def __str__(self):
         return self.name + ' (' + str(self.elevation) + ' m.n.m.)'

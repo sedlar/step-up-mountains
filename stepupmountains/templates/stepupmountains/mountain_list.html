@@ -1,30 +1,92 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Step Up Mountains - Mountain's list{% endblock %}
 {% block content %}
-{% if user.is_authenticated %}
-	<p>Total ascent: <b>{{ total_climbed }}</b> meters.</p>
-{% endif %}
-{% if object_list %}
-	{% for object in object_list %}
-		<form action="{% url 'stepupmountains:climb_object' %}" method="POST">
-		{% csrf_token %}
-		<input type="hidden" name="climbed_object" id="climbed_object" value="{{ object.id }}" />
-		<input type="submit" name="Climb" id="climb_button" value="Climb {{ object.name }}" />
-		</form>
-	{% endfor %}
-{% else %}
-	{% if user.is_authenticated %}
-	<p><b><a href="{% url 'stepupmountains:manageobjects:add' %}">Add some object to climb first.</a></b></p>
-	{% endif %}
-{% endif %}
+    <h3>Climb something</h3>
+    {% if user.is_authenticated %}
+        <div class="row button-bar">
+        {% if object_list %}
+            {% for object in object_list %}
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                    <form action="{% url 'stepupmountains:climb_object' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="climbed_object" id="climbed_object" value="{{ object.id }}" />
+                    <input type="submit" name="Climb" class="btn btn-lg btn-default" value="{{ object.name }}" />
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p><b><a href="{% url 'stepupmountains:manageobjects:add' %}">Add some object to climb first.</a></b></p>
+        {% endif %}
+        </div>
 
-{% if mountain_list %}
-	<table>
-		{% for mountain in mountain_list %}
-			<tr id='{% cycle 'odd' 'even' %}_{{mountain.climbed}}'><td>{{mountain.name}}</td><td id="elevation">{{mountain.elevation}} m. n. m.</td><td>{{mountain.comment}}</td></tr>
-		{% endfor %}
-	</table>
-{% else %}
-	<p>No mountains were found.<p>
-{% endif %}
+        <h3>Your progress</h3>
+
+        <div class="row teaser">
+            <div class="col-sm-4">
+                <div class="highlight">
+                    <div>
+                        <strong>{{ total_climbed }}&nbsp;m</strong>
+                    </div>
+                </div>
+                <h4>Total climbed</h4>
+            </div>
+            <div class="col-sm-4">
+                <div class="highlight">
+                    <div>
+                        <strong>Lysá hora</strong>
+                        <small>1323&nbsp;m</small>
+                    </div>
+                </div>
+                <h4>Already reached</h4>
+            </div>
+            <div class="col-sm-4">
+                <div class="highlight">
+                    <div>
+                        <strong>Plechý</strong>
+                        <small>96 %</small>
+                    </div>
+                </div>
+                <h4>Next target</h4>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if mountain_list %}
+        <table class="table table-striped">
+            {% for mountain in mountain_list %}
+                <tr class="{{ mountain.climbed }}">
+                    <td>{{ mountain.name }}</td>
+                    <td class="elevation">{{ mountain.elevation }}&nbsp;m</td>
+                    <td class="comment">
+                        <span class="hidden-xs">{{ mountain.comment }}</span>
+                        <span class="glyphicon glyphicon-question-sign visible-xs-inline" title="{{ mountain.comment }}" data-toggle="tooltip" data-placement="left"></span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No mountains were found.<p>
+    {% endif %}
+
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        var expander = $('<tr class="expander">' +
+                           '<td colspan=3>' +
+                             '<button class="btn btn-small btn-link">' +
+                               '<span class="glyphicon glyphicon-option-horizontal"></span>' +
+                             '</button>' +
+                           '</td>' +
+                         '</tr>');
+        $("tr:not(.climbed)").slice(0, -2).hide();
+        $("table").prepend(expander);
+        expander.click(function() {
+            $(".expander").remove();
+            $("tr").show();
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
 {% endblock %}

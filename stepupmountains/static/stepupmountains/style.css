@@ -1,16 +1,77 @@
-table {
-    border-collapse: collapse;
+.main {
+    padding: 0 20px 20px 20px;
+    margin-top: -20px;
 }
 
-table, th, td {
-    border: 1px solid black;
+.elevation {
+    text-align: right;
+}
+.table-striped > tbody > tr.climbed {
+    background-color: #C2F3A4;
+}
+.table-striped > tbody > tr.climbed:nth-of-type(2n+1) {
+    background-color: #A6D18C;
+}
+.teaser {
+    margin-bottom: 30px;
+}
+.highlight {
+    background-color: #F06;
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    text-align: center;
+    line-height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.highlight div {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+.highlight strong {
+    display: block;
+    font-size: 160%;
+    color: #fff;
+}
+.highlight small {
+    color: #fff;
+    font-size: 125%;
+    font-weight: bold;
+}
+h4 {
+    text-align: center;
+}
+.table > tbody > tr.expander > td {
+    padding: 0;
+}
+.expander button {
+    width: 100%;
+    margin: 0;
 }
 
-#even_Climbed { background-color: #00CC00 }
-#odd_Climbed { background-color: #009900 }
-#even_NotClimbed { background-color: #CCCCCC }
-#odd_NotClimbed { background-color: #AAAAAA }
+.button-bar button {
+    width: 100%;
+    margin-bottom: 15px;
+}
 
-#account { text-align: right }
-#side { float: right; }
-#elevation { text-align: right }
+@media (max-width: 768px) {
+    .comment {
+        text-align: center;
+    }
+}
+@media (max-width: 992px) and (min-width: 768px) {
+    .teaser .col-sm-6:not(:last-child) {
+        margin-bottom: -75px;
+    }
+    .teaser .col-sm-6:last-child {
+        clear: both;
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+    }
+}
+form {
+    margin-bottom: 30px;
+}
