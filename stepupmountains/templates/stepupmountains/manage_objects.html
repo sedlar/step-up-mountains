@@ -1,23 +1,25 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Step Up Mountains - Manage objects{% endblock %}
 {% block content %}
-	<div><a href="{% url 'stepupmountains:manageobjects:add' %}">Add objects</a></div>
+    <h3>Manage objects</h3>
+    <a href="{% url 'stepupmountains:manageobjects:add' %}"><button class="btn btn-primary">Add objects</button></a>
 	<form method="POST" action="{% url 'stepupmountains:manageobjects:changeorder' %}">
 	{% csrf_token %}
-	<table>
+    <h4>Active objects</h4>
+	<table class="table table-striped">
 	{% for object in active_objects %}
 		<tr>
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
 			<td>{{ object.height }} m</td>
 			<td><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Deactivate</a></td>
-			<td><input type="text" name="{{ object.id }}" value="{{ forloop.counter }}"></td>
+			<td><input type="text" class="form-control" name="{{ object.id }}" value="{{ forloop.counter }}"></td>
 		</tr>
 	{% endfor %}
 	</table>
-	<input type="Submit" value="Change order">
+	<input type="Submit" value="Change order" class="btn btn-primary">
 	</form>
-	<br />
-	<table>
+    <h4>Inactive objects</h4>
+	<table class="table table-striped">
 	{% for object in not_active_objects %}
 		<tr>
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>

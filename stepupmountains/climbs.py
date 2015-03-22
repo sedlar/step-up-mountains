@@ -1,4 +1,5 @@
 from stepupmountains.models import Climb
+from math import floor
 
 def get_all_climbs(user):
 	all_climbs = []
@@ -12,5 +13,5 @@ def get_total_ascent(user):
 	all_climbs = get_all_climbs(user)
 	for climb in all_climbs:
 		total_climbed += climb.climbed_object.height
-	return round(total_climbed, 1)
+	return floor(total_climbed)
 

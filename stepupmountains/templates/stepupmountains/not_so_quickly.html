@@ -1,7 +1,9 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Step Up Mountains - Not so quickly{% endblock %}
 {% block content %}
-<p>HoHo, not so quickly, get some pause before next climb</p>
+<div class="alert alert-warning" role="alert">
+HoHo, not so quickly, get some pause before next climb</p>
+</div>
 <p><a href="{% url 'stepupmountains:mountain_list' %}">Go back</a></p>
 {% endblock %}
 

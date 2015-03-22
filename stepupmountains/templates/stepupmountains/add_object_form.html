@@ -3,14 +3,26 @@
 {% block content %}
     {% load staticfiles %}
     <script src="{% static 'stepupmountains/validateAddObjectForm.js' %}"></script> 
-	<form action="{% if edited_object %}{% url 'stepupmountains:manageobjects:edit'%}{% else %}{% url 'stepupmountains:manageobjects:add' %}{% endif %}" method="POST" name="add_object" onsubmit="return validateAddObjectForm()">
-		{% csrf_token %}
-		{% if edited_object %}
+        <h3>Add Object</h3>
+        <form action="{% if edited_object %}{% url 'stepupmountains:manageobjects:edit'%}{% else %}{% url 'stepupmountains:manageobjects:add' %}{% endif %}" method="POST" name="add_object" onsubmit="return validateAddObjectForm()">
+            {% csrf_token %}
+            {% if edited_object %}
 			<input type="hidden" name="object_id" value="{{ edited_object.id }}" />
-		{% endif %}
-		Object name: <input type="text" name="object_name" id="object_name" value="{{ edited_object.name }}" /><br />
-		Height: <input type="number" name="object_height" id="object_height" value="{{ edited_object.height }}" step="any"/><br />
-		<input type="submit" name="add" id="add" value="{% if edited_object %}Edit object{% else %}Add object{% endif %}" />
+            {% endif %}
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="object_name">Object name</label>
+                    <input class="form-control" type="text" name="object_name" id="object_name" value="{{ edited_object.name }}" /><br />
+                </div>
+                <div class="form-group">
+                    <label for="object_height">Height</label>
+                    <input class="form-control" type="number" name="object_height" id="object_height" value="{{ edited_object.height }}" step="any"/><br />
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="submit" name="add" id="add" value="{% if edited_object %}Edit object{% else %}Add object{% endif %}" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
 	</form>
 {% endblock %}
-
