@@ -29,17 +29,20 @@ def mountain_list(request):
     all_mountains = Mountain.objects.order_by('-elevation');
     all_objects = get_all_active_objects(request.user)
     total_climbed = get_total_ascent(request.user)
-    reached_mountain = Mountain(name = "None", elevation = 0)
     for mountain in all_mountains:
         if Mountain.is_climbed(mountain, total_climbed):
             mountain.climbed = "climbed"
-            if mountain.elevation > reached_mountain.elevation:
-                reached_mountain = mountain
         else:
             mountain.climbed = ""
 
-        next_mountain = all_mountains.filter(elevation__gte = total_climbed).order_by('elevation')[0]
-        remains_to_climb = next_mountain.elevation - total_climbed
+    next_mountain = all_mountains.filter(elevation__gt = total_climbed).order_by('elevation')[0]
+    climbed_mountains = all_mountains.filter(elevation__lte = total_climbed).order_by('-elevation')
+    if len(climbed_mountains) == 0:
+        reached_mountain = Mountain(name = "None", elevation = 0)
+    else:
+        reached_mountain = climbed_mountains[0]
+
+    remains_to_climb = next_mountain.elevation - total_climbed
     context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': int(total_climbed), 'reached_mountain': reached_mountain, 'next_mountain': next_mountain.name, 'remains_to_climb': int(remains_to_climb)}
     return render(request, 'stepupmountains/mountain_list.html', context)
 
