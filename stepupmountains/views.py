@@ -33,7 +33,7 @@ def mountain_list(request):
     for mountain in all_mountains:
         if Mountain.is_climbed(mountain, total_climbed):
             mountain.climbed = "climbed"
-            if reached_mountain is not None:
+            if mountain.elevation > reached_mountain.elevation:
                 reached_mountain = mountain
         else:
             mountain.climbed = ""
