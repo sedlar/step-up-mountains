@@ -59,7 +59,7 @@ class SmokeTests(TestCase):
 
         button_caption = 'Climb ' + self.climbing_object.name
         response = self.client.post(reverse('stepupmountains:climb_object'), {'climbed_object': self.climbing_object.id, 'Climb': button_caption})
-        self.assertRedirects(response, reverse('stepupmountains:mountain_list'))
+        self.assertRedirects(response, reverse('stepupmountains:mountain_list_args', kwargs={'climbed': self.climbing_object.name}))
 
         all_mountains = Mountain.objects.order_by('-elevation');
         add_climbed_attribute_to_all(all_mountains, 0)
@@ -100,7 +100,7 @@ class SmokeTests(TestCase):
 
         button_caption = 'Climb ' + self.climbing_object.name
         response = self.client.post(reverse('stepupmountains:climb_object'), {'climbed_object': self.climbing_object.id, 'Climb': button_caption})
-        self.assertRedirects(response, reverse('stepupmountains:mountain_list'))
+        self.assertRedirects(response, reverse('stepupmountains:mountain_list_args', kwargs={'climbed': self.climbing_object.name}))
 
         response = self.client.get(reverse('stepupmountains:mountain_list'))
         self.assertEqual(response.status_code, 200)
