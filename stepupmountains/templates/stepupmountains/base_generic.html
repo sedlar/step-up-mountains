@@ -26,6 +26,7 @@
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'stepupmountains:manageobjects:manageobjects' %}">Manage objects</a></li>
+                    <li><a href="{% url 'stepupmountains:statistics' %}">Statistics</a></li>
                     <li><a href="{% url 'stepupmountains:history' %}">History</a></li>
                     {% endif %}
                 </ul>

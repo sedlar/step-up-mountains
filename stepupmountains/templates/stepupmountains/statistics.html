@@ -1,0 +1,23 @@
+{% extends "stepupmountains/base_generic.html" %}
+{% block title %}Step Up Mountains - Statistics{% endblock %}
+{% block content %}
+<h3>Climbing statistics</h3>    
+<table class="table table-striped">
+    <tr>
+        <td>Total ascent</td>
+        <td>{{ total_ascent }}</td>
+    </tr>
+    <tr>
+        <td>Average daily climb (all)</td>
+        <td>{{ average_climb }}</td>
+    </tr>
+    <tr>
+        <td>Average daily climb (active days)</td>
+        <td>{{ average_active_climb }}</td>
+    </tr>
+    <tr>
+        <td>First climb</td>
+        <td>{{ first_climbed }}</td>
+    </tr>
+</table>
+{% endblock %}

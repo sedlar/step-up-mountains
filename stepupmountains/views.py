@@ -76,3 +76,29 @@ def history(request):
     climbs = get_all_climbs(request.user).order_by('-datetime')
     context = {'climbs': climbs}
     return render(request, 'stepupmountains/history.html', context)
+
+@require_GET
+@login_required
+def statistics(request):
+    total_ascent = get_total_ascent(request.user)
+
+    first_climbed_date = get_all_climbs(request.user).order_by('datetime').first()
+    if first_climbed_date is None:
+        first_climbed = 'Never'
+        average_climb = 'N/A'
+        average_active_climb = 'N/A'
+    else:
+        first_climbed = first_climbed_date.datetime
+        total_days = (timezone.now().date()-first_climbed.date()).days+1
+        average_climb = round(total_ascent/total_days, 1)
+
+        climbing_days = get_all_climbs(request.user).values('datetime')
+        active_days = set()
+        for d in climbing_days:
+            active_days.add(d['datetime'].date())
+    
+        num_active_days = len(active_days)
+        average_active_climb = round(total_ascent/num_active_days, 1)
+
+    context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb}
+    return render(request, 'stepupmountains/statistics.html', context)
