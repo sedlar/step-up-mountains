@@ -10,6 +10,12 @@ class Mountain(models.Model):
     def is_climbed(self, ascent):
         return ascent >= self.elevation
 
+    def add_climbed_attribute(self, ascent):
+        if self.is_climbed(ascent):
+            self.climbed = "climbed"
+        else:
+            self.climbed = ""
+
     def __str__(self):
         return self.name + ' (' + str(self.elevation) + ' m.n.m.)'
 

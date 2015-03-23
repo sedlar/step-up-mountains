@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 from stepupmountains.climbs import get_total_ascent, get_all_climbs
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.http import require_http_methods
+from stepupmountains.mountains import add_climbed_attribute_to_all
 
 # Create your views here.
 
@@ -29,13 +30,14 @@ def mountain_list(request):
     all_mountains = Mountain.objects.order_by('-elevation');
     all_objects = get_all_active_objects(request.user)
     total_climbed = get_total_ascent(request.user)
-    for mountain in all_mountains:
-        if Mountain.is_climbed(mountain, total_climbed):
-            mountain.climbed = "climbed"
-        else:
-            mountain.climbed = ""
+    add_climbed_attribute_to_all(all_mountains, total_climbed)
 
-    next_mountain = all_mountains.filter(elevation__gt = total_climbed).order_by('elevation')[0]
+    next_mountains = all_mountains.filter(elevation__gt = total_climbed).order_by('elevation')
+    if len(next_mountains) == 0:
+        next_mountain = Mountain(name = "None", elevation = 0)
+    else:
+        next_mountain = next_mountains[0]
+
     climbed_mountains = all_mountains.filter(elevation__lte = total_climbed).order_by('-elevation')
     if len(climbed_mountains) == 0:
         reached_mountain = Mountain(name = "None", elevation = 0)

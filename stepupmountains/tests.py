@@ -5,6 +5,7 @@ from stepupmountains.models import ClimbingObject
 from stepupmountains.models import Mountain
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from stepupmountains.mountains import add_climbed_attribute_to_all
 #from unittest import skip
 
 # Create your tests here.
@@ -15,24 +16,64 @@ class SmokeTests(TestCase):
         self.testpassword = 'testpassword'
         self.testuser = User.objects.create_user('testuser', 'lennon@thebeatles.com', self.testpassword)
         self.testuser.save()
-        self.climbing_object = ClimbingObject(user = self.testuser, name = 'test_object', height = 123, order = 0)
+        self.climbing_object = ClimbingObject(user = self.testuser, name = 'test_object', height = 500, order = 0)
         self.climbing_object.save()
         Mountain(name='Mount Everest', elevation=8850, comment='Mount Everest comment').save()
         Mountain(name='Praded', elevation=1492, comment='Praded comment').save()
+        Mountain(name='Rampach', elevation=442, comment='Vlnak na Hane').save()
 
+    def test_show_mountain_list_no_login(self):
+        all_mountains = Mountain.objects.order_by('-elevation');
+        add_climbed_attribute_to_all(all_mountains, 0)
+
+        response = self.client.get(reverse('stepupmountains:mountain_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['mountain_list'], [repr(r) for r in all_mountains])
                 
-    def test_show_mountain_list(self):
+    def test_show_mountain_list_no_climb(self):
         """
         Check that mountain_list view is displayed
         """
+        self.client.login(username=self.testuser.username, password=self.testpassword)
+
         all_mountains = Mountain.objects.order_by('-elevation');
-        for mountain in all_mountains:
-            mountain.climbed = Mountain.is_climbed(mountain, 0)
+        add_climbed_attribute_to_all(all_mountains, 0)
 
 
         response = self.client.get(reverse('stepupmountains:mountain_list'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['mountain_list'], [repr(r) for r in all_mountains])
+#check reached mountain
+        self.assertEqual(response.context['reached_mountain'].name, 'None')
+        self.assertEqual(response.context['reached_mountain'].elevation, 0)
+#check next mountain
+        self.assertEqual(response.context['next_mountain'], 'Rampach')
+        self.assertEqual(response.context['remains_to_climb'], 442)
+
+    def test_show_mountain_list_climbed(self):
+        """
+        Check that mountain_list view is displayed
+        """
+#SetUp
+        self.client.login(username=self.testuser.username, password=self.testpassword)
+
+        button_caption = 'Climb ' + self.climbing_object.name
+        response = self.client.post(reverse('stepupmountains:climb_object'), {'climbed_object': self.climbing_object.id, 'Climb': button_caption})
+        self.assertRedirects(response, reverse('stepupmountains:mountain_list'))
+
+        all_mountains = Mountain.objects.order_by('-elevation');
+        add_climbed_attribute_to_all(all_mountains, 0)
+
+#Test
+        response = self.client.get(reverse('stepupmountains:mountain_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['mountain_list'], [repr(r) for r in all_mountains])
+#check reached mountain
+        self.assertEqual(response.context['reached_mountain'].name, 'Rampach')
+        self.assertEqual(response.context['reached_mountain'].elevation, 442)
+#check next mountain
+        self.assertEqual(response.context['next_mountain'], 'Praded')
+        self.assertEqual(response.context['remains_to_climb'], 1492-self.climbing_object.height)
 
     def test_login(self):
         """
