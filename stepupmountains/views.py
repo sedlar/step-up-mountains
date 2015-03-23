@@ -26,7 +26,7 @@ def not_so_quickly(request):
     return render(request, 'stepupmountains/not_so_quickly.html')
 
 @require_GET
-def mountain_list(request):
+def mountain_list(request, climbed = None):
     all_mountains = Mountain.objects.order_by('-elevation');
     all_objects = get_all_active_objects(request.user)
     total_climbed = get_total_ascent(request.user)
@@ -45,7 +45,7 @@ def mountain_list(request):
         reached_mountain = climbed_mountains[0]
 
     remains_to_climb = next_mountain.elevation - total_climbed
-    context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': int(total_climbed), 'reached_mountain': reached_mountain, 'next_mountain': next_mountain.name, 'remains_to_climb': int(remains_to_climb)}
+    context = {'mountain_list': all_mountains, 'object_list': all_objects, 'total_climbed': int(total_climbed), 'reached_mountain': reached_mountain, 'next_mountain': next_mountain.name, 'remains_to_climb': int(remains_to_climb), 'climbed': climbed}
     return render(request, 'stepupmountains/mountain_list.html', context)
 
 @require_http_methods(['GET', 'POST'])
@@ -63,9 +63,9 @@ def climb_object(request):
 
     latest_climb = get_all_climbs(request.user).extra(order_by = ['-datetime']).first()
     if latest_climb:
-        if latest_climb.datetime + datetime.timedelta(minutes=1) > timezone.now():
+        if latest_climb.datetime + datetime.timedelta(minutes=0) > timezone.now():
             return HttpResponseRedirect(reverse('stepupmountains:not_so_quickly'))
 			
     climb = Climb(user=request.user, climbed_object=climbed_object)
     climb.save()
-    return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
+    return HttpResponseRedirect(reverse('stepupmountains:mountain_list_args', kwargs={'climbed': climbed_object.name}))

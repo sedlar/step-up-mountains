@@ -8,5 +8,6 @@ urlpatterns = patterns(
 	url(r'accounts/', include('stepupmountains.accounts.urls', namespace="accounts")),
 	url(r'climb/$', views.climb_object, name='climb_object'),
 	url(r'not_so_quickly/$', views.not_so_quickly, name='not_so_quickly'),
+	url(r'main/(?P<climbed>.*)$', views.mountain_list, name='mountain_list_args'),
 	url(r'.*$', views.mountain_list, name='mountain_list'),
 	)

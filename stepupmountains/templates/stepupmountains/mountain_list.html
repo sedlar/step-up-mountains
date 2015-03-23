@@ -1,6 +1,21 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Step Up Mountains - Mountain's list{% endblock %}
 {% block content %}
+    {% if climbed %}
+    <div class="alert alert-success" role="alert" id="climbed-alert">
+    You have climbed <strong>{{ climbed }}</strong>
+    </div>
+    <script>
+    setTimeout(hide, 30000)
+    function hide()
+    {
+        var stateObj = { };
+        history.pushState(stateObj, "StepUpMountains - Mountain List", "/");
+        bar = document.getElementById('climbed-alert')
+        bar.style.display='none'
+    }
+    </script>
+    {% endif %}
     <h3>Climb something</h3>
     {% if user.is_authenticated %}
         <div class="row button-bar">
