@@ -69,3 +69,10 @@ def climb_object(request):
     climb = Climb(user=request.user, climbed_object=climbed_object)
     climb.save()
     return HttpResponseRedirect(reverse('stepupmountains:mountain_list_args', kwargs={'climbed': climbed_object.name}))
+
+@require_GET
+@login_required
+def history(request):
+    climbs = get_all_climbs(request.user).order_by('-datetime')
+    context = {'climbs': climbs}
+    return render(request, 'stepupmountains/history.html', context)

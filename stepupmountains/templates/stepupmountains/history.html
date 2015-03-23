@@ -1,0 +1,14 @@
+{% extends "stepupmountains/base_generic.html" %}
+{% block title %}Step Up Mountains - History{% endblock %}
+{% block content %}
+<h3>Climbing history</h3>    
+<table class="table table-striped">
+{% for climb in climbs %}
+    <tr>
+        <td>{{ climb.datetime }}</td>
+        <td>{{ climb.climbed_object.name }}</td>
+        <td>{{ climb.climbed_object.height }} m</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

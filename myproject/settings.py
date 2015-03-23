@@ -153,9 +153,11 @@ else:
 sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/"))
 sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/accounts/"))
 
+DATETIME_FORMAT = 'Y-m-d H:i'
+USE_L10N = False
 LOGIN_URL = 'stepupmountains:accounts:django.contrib.auth.views.login'
 LOGIN_REDIRECT_URL = '/'
-if DEBUG:
-	from pprint import pprint as p
-	print p(sys.path)
+#if DEBUG:
+	#from pprint import pprint as p
+	#print p(sys.path)
 
