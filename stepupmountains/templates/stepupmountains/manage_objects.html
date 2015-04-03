@@ -1,32 +1,52 @@
 {% extends "stepupmountains/base_generic.html" %}
 {% block title %}Step Up Mountains - Manage objects{% endblock %}
 {% block content %}
+     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+     <script src="jquery.ui.touch-punch.min.js"></script>
+     <script>
+        $(function() {
+            $( "#sortable" ).sortable({
+                update: function( event, ui )
+                {
+                    var order = {csrfmiddlewaretoken: '{{ csrf_token }}'}
+                    var rows = document.querySelectorAll('#active-objects tbody tr');
+                    for(var i = 0; i < rows.length; i+=1)
+                    {
+                        var row = rows[i]
+                        order[row.id.split("-")[2]] = row.rowIndex
+                    }
+                   $.post( "{%url 'stepupmountains:manageobjects:changeorder' %}", order)
+                }
+            });
+            $( "#sortable" ).disableSelection();
+        });
+    </script>
     <h3>Manage objects</h3>
     <a href="{% url 'stepupmountains:manageobjects:add' %}"><button class="btn btn-primary">Add objects</button></a>
-	<form method="POST" action="{% url 'stepupmountains:manageobjects:changeorder' %}">
-	{% csrf_token %}
     <h4>Active objects</h4>
-	<table class="table table-striped">
-        <tr>
-			<th>Name</th>
-			<th>Height</th>
-			<th>No. of stairs</th>
-			<th></th>
-			<th></th>
-		</tr>
+	<table id="active-objects" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Height</th>
+                <th>No. of stairs</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
 
-	{% for object in active_objects %}
-		<tr>
-			<td><div class="form-control-static"><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></div></td>
-			<td><div class="form-control-static">{{ object.height }} m</div></td>
-			<td><div class="form-control-static">{{ object.stairs_no }}</div></td>
-			<td><div class="form-control-static"><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Deactivate</a></div></td>
-			<td><input type="text" class="form-control" name="{{ object.id }}" value="{{ forloop.counter }}"></td>
-		</tr>
-	{% endfor %}
+        <tbody id="sortable">
+        {% for object in active_objects %}
+            <tr id="active-object-{{ object.id }}">
+                <td><div class="form-control-static"><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></div></td>
+                <td><div class="form-control-static">{{ object.height }} m</div></td>
+                <td><div class="form-control-static">{{ object.stairs_no }}</div></td>
+                <td><div class="form-control-static"><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Deactivate</a></div></td>
+            </tr>
+        {% endfor %}
+        </tbody>
 	</table>
-	<input type="Submit" value="Change order" class="btn btn-primary">
-	</form>
     <h4>Inactive objects</h4>
 	<table class="table table-striped">
         <tr>
