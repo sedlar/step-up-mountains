@@ -90,6 +90,7 @@
         </div>
     {% endif %}
 
+    <div class="row mountain-table">
     {% if mountain_list %}
         <table class="table table-striped">
             {% for mountain in mountain_list %}
@@ -106,12 +107,13 @@
     {% else %}
         <p>No mountains were found.<p>
     {% endif %}
+    </div>
 
-{% if user.is_authenticated %}
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
+            {% if user.is_authenticated %}
             var expander = $('<tr class="expander">' +
                                '<td colspan=3>' +
                                  '<button class="btn btn-small btn-link">' +
@@ -125,8 +127,8 @@
                 $(".expander").remove();
                 $("tr").show();
             });
+            {% endif %}
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-{% endif %}
 {% endblock %}
