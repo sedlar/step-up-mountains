@@ -94,20 +94,19 @@ def changeactivestatus(request, object_id):
 	changed_object.save()
 	return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
 
-@require_http_methods(["GET", "POST"])
+@require_POST
 @login_required
 def changeorder(request):
-	if request.method == 'GET':
-		return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
-	for order_data in request.POST.items():
-		if re.match("^[0-9]+$", order_data[0]):
-			changed_object = get_object_by_id(request.user, order_data[0])
-			if re.match("^[0-9]+$", order_data[1]):
-				changed_object.order = order_data[1]
-				changed_object.save()
-			else:
-				changed_object.order = 9999999
-				changed_object.save()
+    for order_data in request.POST.items():
+        if re.match("^[0-9]+$", order_data[0]):
+            changed_object = get_object_by_id(request.user, order_data[0])
+            if changed_object:
+                if re.match("^[0-9]+$", order_data[1]):
+                    changed_object.order = order_data[1]
+                    changed_object.save()
+                else:
+                    changed_object.order = 9999999
+                    changed_object.save()
 			
-	return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+    return HttpResponse("")
 
