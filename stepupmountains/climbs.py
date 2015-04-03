@@ -15,3 +15,10 @@ def get_total_ascent(user):
 		total_climbed += climb.climbed_object.height
 	return floor(total_climbed)
 
+def get_total_stairs(user):
+	total_stairs=0
+	all_climbs = get_all_climbs(user)
+	for climb in all_climbs:
+		total_stairs += climb.climbed_object.stairs_no
+	return total_stairs
+

@@ -17,50 +17,54 @@ from objects import get_all_objects, get_object_by_id, get_max_object_order
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from stepupmountains.manageobjects.climbing_object_form import ClimbingObjectForm
 
 # Create your views here.
 @require_http_methods(["GET", "POST"])
 @login_required
 def add(request):
-	if request.method == 'GET':
-		if request.user.is_authenticated():
-			return render(request, 'stepupmountains/add_object_form.html')
-		else:
-			return HttpResponseRedirect(reverse('stepupmountains:mountain_list'), context)
-	else:
-		object_name = request.POST['object_name']
-		object_height = request.POST['object_height']
-		if not object_name or not re.match("^[0-9]+(\.[0-9]+)?$", object_height):
-			return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
-		object_order = get_max_object_order(request.user) + 1
-		climbing_object = ClimbingObject(user = request.user, name = object_name, height = object_height, order = object_order)
-		climbing_object.save()
-		return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+    if request.method == 'POST':
+        form = ClimbingObjectForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            object_order = get_max_object_order(request.user) + 1
+            climbing_object = ClimbingObject(user = request.user, name = form.cleaned_data['name'], height = form.cleaned_data['height'], stairs_no = form.cleaned_data['stairs_no'], order = object_order)
+            climbing_object.save()
 
+            return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ClimbingObjectForm()
+    return render(request, 'stepupmountains/add_object_form.html', {'form': form})
 
 @require_http_methods(["GET", "POST"])
 @login_required
 def edit(request, object_id = None):
-	if request.method == 'GET':
-		if request.user.is_authenticated():
-			edited_object = get_object_by_id(request.user, object_id)
-			if not edited_object:
-				return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
-			context = { 'edited_object': edited_object }
-			return render(request, 'stepupmountains/add_object_form.html', context)
-		else:
-			return HttpResponseRedirect(reverse('stepupmountains:mountain_list'))
-	else:
-		object_name = request.POST['object_name']
-		object_height = request.POST['object_height']
-		object_id = request.POST['object_id']
-		if not object_name or not re.match("^[0-9]+(\.[0-9]+)?$", object_height) or not re.match("^[0-9]+$", object_id):
-			return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
-		climbing_object = get_object_by_id(request.user, object_id)
-		climbing_object.name = object_name
-		climbing_object.height = object_height
-		climbing_object.save()
-		return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+    if request.method == 'POST':
+        form = ClimbingObjectForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            object_order = get_max_object_order(request.user) + 1
+            climbing_object = get_object_by_id(request.user, form.cleaned_data['object_id'])
+            if climbing_object:
+                climbing_object.name = form.cleaned_data['name']
+                climbing_object.height = form.cleaned_data['height']
+                climbing_object.stairs_no = form.cleaned_data['stairs_no']
+                climbing_object.save()
+
+            return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        edited_object = get_object_by_id(request.user, object_id)
+        if edited_object:
+            data = {'name': edited_object.name, 'object_id': edited_object.id, 'height': edited_object.height, 'stairs_no': edited_object.stairs_no}
+            form = ClimbingObjectForm(initial = data)
+        else:
+            return HttpResponseRedirect(reverse('stepupmountains:manageobjects:manageobjects'))
+
+    return render(request, 'stepupmountains/add_object_form.html', {'form': form, 'edit': True})
 
 
 @require_GET

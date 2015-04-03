@@ -38,6 +38,7 @@ class ClimbingObject(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=200)
     height = models.FloatField()
+    stairs_no = models.IntegerField(default = 0)
     active = models.BooleanField(default=True)
     order = models.IntegerField()
     objects = UserManager()

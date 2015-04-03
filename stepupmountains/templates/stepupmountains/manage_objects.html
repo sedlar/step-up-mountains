@@ -7,10 +7,19 @@
 	{% csrf_token %}
     <h4>Active objects</h4>
 	<table class="table table-striped">
+        <tr>
+			<th>Name</th>
+			<th>Height</th>
+			<th>No. of stairs</th>
+			<th></th>
+			<th></th>
+		</tr>
+
 	{% for object in active_objects %}
 		<tr>
 			<td><div class="form-control-static"><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></div></td>
 			<td><div class="form-control-static">{{ object.height }} m</div></td>
+			<td><div class="form-control-static">{{ object.stairs_no }}</div></td>
 			<td><div class="form-control-static"><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Deactivate</a></div></td>
 			<td><input type="text" class="form-control" name="{{ object.id }}" value="{{ forloop.counter }}"></td>
 		</tr>
@@ -20,10 +29,19 @@
 	</form>
     <h4>Inactive objects</h4>
 	<table class="table table-striped">
+        <tr>
+			<th>Name</th>
+			<th>Height</th>
+			<th>No. of stairs</th>
+			<th></th>
+			<th></th>
+		</tr>
+
 	{% for object in not_active_objects %}
 		<tr>
 			<td><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></td>
 			<td>{{ object.height }} m</td>
+			<td>{{ object.stairs_no }}</td>
 			<td><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Activate</a></td>
 		</tr>
 	{% endfor %}

@@ -13,7 +13,7 @@ from datetime import timedelta
 import re
 from objects import get_object_by_id, get_all_active_objects
 from django.contrib.auth.decorators import login_required
-from stepupmountains.climbs import get_total_ascent, get_all_climbs
+from stepupmountains.climbs import get_total_ascent, get_all_climbs, get_total_stairs
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.http import require_http_methods
 from stepupmountains.mountains import add_climbed_attribute_to_all
@@ -81,6 +81,7 @@ def history(request):
 @login_required
 def statistics(request):
     total_ascent = get_total_ascent(request.user)
+    total_stairs = get_total_stairs(request.user)
 
     first_climbed_date = get_all_climbs(request.user).order_by('datetime').first()
     if first_climbed_date is None:
@@ -100,5 +101,5 @@ def statistics(request):
         num_active_days = len(active_days)
         average_active_climb = round(total_ascent/num_active_days, 1)
 
-    context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb}
+    context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb, 'total_stairs': total_stairs}
     return render(request, 'stepupmountains/statistics.html', context)
