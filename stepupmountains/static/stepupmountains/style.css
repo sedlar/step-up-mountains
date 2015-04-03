@@ -75,3 +75,9 @@ h4 {
 form {
     margin-bottom: 30px;
 }
+.glyphicon-move {
+     color: grey;
+}
+.active-object-row {
+    cursor: move;
+}

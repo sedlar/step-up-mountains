@@ -39,8 +39,8 @@
 
         <tbody id="sortable">
         {% for object in active_objects %}
-            <tr id="active-object-{{ object.id }}">
-                <td><div class="form-control-static"><a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></div></td>
+            <tr class="active-object-row" id="active-object-{{ object.id }}">
+                <td><div class="form-control-static"><span class="glyphicon glyphicon-move"></span> <a href="{%url 'stepupmountains:manageobjects:edit' object.id %}">{{ object.name }}</a></div></td>
                 <td><div class="form-control-static">{{ object.height }} m</div></td>
                 <td><div class="form-control-static">{{ object.stairs_no }}</div></td>
                 <td><div class="form-control-static"><a href="{% url 'stepupmountains:manageobjects:changeactivestatus' object.id %}">Deactivate</a></div></td>
