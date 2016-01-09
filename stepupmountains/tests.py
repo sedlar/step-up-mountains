@@ -79,6 +79,7 @@ class SmokeTests(TestCase):
         """
         Check user can log in
         """
+        Mountain(name='Mount Everest', elevation=8850, comment='Mount Everest comment').save()
         response = self.client.get(reverse('stepupmountains:accounts:login'))
         self.assertEqual(response.status_code, 200)
 

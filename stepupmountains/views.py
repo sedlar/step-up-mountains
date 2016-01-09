@@ -17,6 +17,7 @@ from stepupmountains.climbs import get_total_ascent, get_all_climbs, get_total_s
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.http import require_http_methods
 from stepupmountains.mountains import add_climbed_attribute_to_all
+import math
 
 # Create your views here.
 
@@ -28,8 +29,12 @@ def not_so_quickly(request):
 @require_GET
 def mountain_list(request, climbed = None):
     all_mountains = Mountain.objects.order_by('-elevation');
+    if len(all_mountains):
+        highest_mountain_elevation = all_mountains[0].elevation
+    else:
+        highest_mountain_elevation = 9999999999999999999
     all_objects = get_all_active_objects(request.user)
-    total_climbed = get_total_ascent(request.user)
+    total_climbed = get_total_ascent(request.user) % highest_mountain_elevation
     add_climbed_attribute_to_all(all_mountains, total_climbed)
 
     next_mountains = all_mountains.filter(elevation__gt = total_climbed).order_by('elevation')
@@ -88,6 +93,7 @@ def statistics(request):
         first_climbed = 'Never'
         average_climb = 'N/A'
         average_active_climb = 'N/A'
+        highest_mountain_climbed = 'N/A'
     else:
         first_climbed = first_climbed_date.datetime
         total_days = (timezone.now().date()-first_climbed.date()).days+1
@@ -100,6 +106,8 @@ def statistics(request):
     
         num_active_days = len(active_days)
         average_active_climb = round(total_ascent/num_active_days, 1)
+        all_mountains = Mountain.objects.order_by('-elevation');
+        highest_mountain_climbed = int(math.floor(total_ascent/all_mountains[0].elevation))
 
-    context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb, 'total_stairs': total_stairs}
+    context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb, 'total_stairs': total_stairs, 'highest_mountain_climbed': highest_mountain_climbed}
     return render(request, 'stepupmountains/statistics.html', context)
