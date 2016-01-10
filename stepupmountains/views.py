@@ -13,7 +13,7 @@ from datetime import timedelta
 import re
 from objects import get_object_by_id, get_all_active_objects
 from django.contrib.auth.decorators import login_required
-from stepupmountains.climbs import get_total_ascent, get_all_climbs, get_total_stairs
+from stepupmountains.climbs import get_total_ascent, get_all_climbs, get_total_stairs, get_fastest_climb, format_fastest_climb
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.http import require_http_methods
 from stepupmountains.mountains import add_climbed_attribute_to_all
@@ -87,6 +87,7 @@ def history(request):
 def statistics(request):
     total_ascent = get_total_ascent(request.user)
     total_stairs = get_total_stairs(request.user)
+    highest_mountain = Mountain.objects.order_by('-elevation').first();
 
     first_climbed_date = get_all_climbs(request.user).order_by('datetime').first()
     if first_climbed_date is None:
@@ -94,6 +95,7 @@ def statistics(request):
         average_climb = 'N/A'
         average_active_climb = 'N/A'
         highest_mountain_climbed = 'N/A'
+        fastest_climb = 'N/A'
     else:
         first_climbed = first_climbed_date.datetime
         total_days = (timezone.now().date()-first_climbed.date()).days+1
@@ -106,8 +108,9 @@ def statistics(request):
     
         num_active_days = len(active_days)
         average_active_climb = round(total_ascent/num_active_days, 1)
-        highest_mountain = Mountain.objects.order_by('-elevation').first();
         highest_mountain_climbed = int(math.floor(total_ascent/highest_mountain.elevation))
-
-    context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb, 'total_stairs': total_stairs, 'highest_mountain_climbed': highest_mountain_climbed}
+        fastest_climb = get_fastest_climb(get_all_climbs(request.user).order_by('datetime'), highest_mountain)
+        str_fastest_climb = format_fastest_climb(fastest_climb)
+        
+    context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb, 'total_stairs': total_stairs, 'highest_mountain_climbed': highest_mountain_climbed, 'fastest_climb': str_fastest_climb}
     return render(request, 'stepupmountains/statistics.html', context)

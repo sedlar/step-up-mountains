@@ -3,9 +3,15 @@ from django.test import Client
 from django.test.utils import setup_test_environment
 from stepupmountains.models import ClimbingObject
 from stepupmountains.models import Mountain
+from stepupmountains.models import Climb
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from stepupmountains.mountains import add_climbed_attribute_to_all
+import datetime
+from django.utils import timezone
+from stepupmountains.climbs import get_fastest_climb, get_all_climbs, format_fastest_climb
+from time import sleep
+from datetime import timedelta
 #from unittest import skip
 
 # Create your tests here.
@@ -109,3 +115,112 @@ class SmokeTests(TestCase):
         new_ascent = response.context['total_climbed']
         self.assertEqual(ascent+self.climbing_object.height, new_ascent)
 
+    def test_fastest_climb(self):
+        """
+        Check simple fastest climb calculation
+        """
+        self.testpassword = 'testpassword'
+        self.testuser = User.objects.create_user('UliSnek', 'lennon@thebeatles.com', self.testpassword)
+        self.testuser.save()
+        self.climbing_object1 = ClimbingObject(user = self.testuser, name = 'test_object', height = 1000, order = 0)
+        self.climbing_object1.save()
+
+        highest_mountain = Mountain(name='Mount Everest', elevation=8850, comment='Mount Everest comment')
+        highest_mountain.save()
+
+        self.climb1 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb1.save()
+        sleep(1)
+        self.climb2 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb2.save()
+        self.climb3 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb3.save()
+        self.climb4 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb4.save()
+        self.climb5 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb5.save()
+        self.climb6 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb6.save()
+        self.climb7 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb7.save()
+        self.climb8 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb8.save()
+        self.climb9 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb9.save()
+        self.climb10 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb10.save()
+        sleep(1)
+        self.climb11 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb11.save()
+
+        self.assertEqual(self.climb10.datetime-self.climb2.datetime, get_fastest_climb(get_all_climbs(self.testuser).order_by('datetime'), highest_mountain))
+
+    def test_fastest_climb_different_heights(self):
+        """
+        Check simple fastest climb calculation
+        """
+        self.testpassword = 'testpassword'
+        self.testuser = User.objects.create_user('UliSnek', 'lennon@thebeatles.com', self.testpassword)
+        self.testuser.save()
+        self.climbing_object1 = ClimbingObject(user = self.testuser, name = 'test_object', height = 1000, order = 0)
+        self.climbing_object1.save()
+        self.climbing_object2 = ClimbingObject(user = self.testuser, name = 'test_object2', height = 4000, order = 0)
+        self.climbing_object2.save()
+
+        highest_mountain = Mountain(name='Mount Everest', elevation=8850, comment='Mount Everest comment')
+        highest_mountain.save()
+
+        self.climb1 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb1.save()
+        self.climb2 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb2.save()
+        self.climb3 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb3.save()
+        self.climb4 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb4.save()
+        self.climb5 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb5.save()
+        self.climb6 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb6.save()
+        self.climb7 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb7.save()
+        self.climb8 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb8.save()
+        self.climb9 = Climb(user=self.testuser, climbed_object=self.climbing_object2)
+        self.climb9.save()
+
+        self.assertEqual(self.climb9.datetime-self.climb4.datetime, get_fastest_climb(get_all_climbs(self.testuser).order_by('datetime'), highest_mountain))
+
+    def test_fastest_climb_not_climbed(self):
+        """
+        Check simple fastest climb calculation
+        """
+        self.testpassword = 'testpassword'
+        self.testuser = User.objects.create_user('UliSnek', 'lennon@thebeatles.com', self.testpassword)
+        self.testuser.save()
+        self.climbing_object1 = ClimbingObject(user = self.testuser, name = 'test_object', height = 1000, order = 0)
+        self.climbing_object1.save()
+
+        highest_mountain = Mountain(name='Mount Everest', elevation=8850, comment='Mount Everest comment')
+        highest_mountain.save()
+
+        self.climb1 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb1.save()
+        self.climb2 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb2.save()
+        self.climb3 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb3.save()
+        self.climb4 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb4.save()
+        self.climb5 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb5.save()
+        self.climb6 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb6.save()
+        self.climb7 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb7.save()
+        self.climb8 = Climb(user=self.testuser, climbed_object=self.climbing_object1)
+        self.climb8.save()
+
+        fastest_climb = get_fastest_climb(get_all_climbs(self.testuser).order_by('datetime'), highest_mountain)
+        self.assertEqual(timedelta.max, fastest_climb)
+        self.assertEqual("N/A", format_fastest_climb(fastest_climb))
