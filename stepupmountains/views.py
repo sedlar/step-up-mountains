@@ -106,8 +106,8 @@ def statistics(request):
     
         num_active_days = len(active_days)
         average_active_climb = round(total_ascent/num_active_days, 1)
-        all_mountains = Mountain.objects.order_by('-elevation');
-        highest_mountain_climbed = int(math.floor(total_ascent/all_mountains[0].elevation))
+        highest_mountain = Mountain.objects.order_by('-elevation').first();
+        highest_mountain_climbed = int(math.floor(total_ascent/highest_mountain.elevation))
 
     context = {'total_ascent': total_ascent, 'first_climbed': first_climbed, 'average_climb': average_climb, 'average_active_climb': average_active_climb, 'total_stairs': total_stairs, 'highest_mountain_climbed': highest_mountain_climbed}
     return render(request, 'stepupmountains/statistics.html', context)
