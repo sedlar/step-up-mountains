@@ -15,6 +15,5 @@ class Migration(migrations.Migration):
             model_name='climbingobject',
             name='height',
             field=models.FloatField(),
-            preserve_default=True,
         ),
     ]

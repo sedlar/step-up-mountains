@@ -1,12 +1,11 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
 import django.contrib.auth.views
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
 
 APEND_SLASH = True
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'stepupmountains/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': 'stepupmountains:mountain_list'}),
     url(r'^change-password/$', 'django.contrib.auth.views.password_change', {'template_name': 'stepupmountains/changepassword.html', 'post_change_redirect': 'stepupmountains:accounts:change_password_done'}
@@ -18,4 +17,4 @@ urlpatterns = patterns(
             form_class=UserCreationForm,
             success_url='/accounts/login/')
         , name='register'),
-    )
+    ]

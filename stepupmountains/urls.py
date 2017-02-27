@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
+from myproject import settings
 
 from stepupmountains import views
 
-urlpatterns = patterns(
-	'',
+urlpatterns = [
 	url(r'manage-objects/', include('stepupmountains.manageobjects.urls', namespace="manageobjects")),
 	url(r'accounts/', include('stepupmountains.accounts.urls', namespace="accounts")),
 	url(r'climb/$', views.climb_object, name='climb_object'),
@@ -11,5 +11,6 @@ urlpatterns = patterns(
 	url(r'history/$', views.history, name='history'),
 	url(r'statistics/$', views.statistics, name='statistics'),
 	url(r'main/(?P<climbed>.*)$', views.mountain_list, name='mountain_list_args'),
-	url(r'.*$', views.mountain_list, name='mountain_list'),
-	)
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+	url(r'^$', views.mountain_list, name='mountain_list'),
+	]

@@ -15,6 +15,5 @@ class Migration(migrations.Migration):
             model_name='climbingobject',
             name='stairs_no',
             field=models.IntegerField(default=0),
-            preserve_default=True,
         ),
     ]

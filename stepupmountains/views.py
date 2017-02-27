@@ -11,7 +11,7 @@ from django.utils import timezone
 import datetime
 from datetime import timedelta
 import re
-from objects import get_object_by_id, get_all_active_objects
+from stepupmountains.manageobjects.objects import get_object_by_id, get_all_active_objects
 from django.contrib.auth.decorators import login_required
 from stepupmountains.climbs import get_total_ascent, get_all_climbs, get_total_stairs, get_fastest_climb, format_fastest_climb
 from django.views.decorators.http import require_GET, require_POST

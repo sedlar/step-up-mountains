@@ -15,12 +15,10 @@ class Migration(migrations.Migration):
             model_name='climbingobject',
             name='active',
             field=models.BooleanField(default=True),
-            preserve_default=True,
         ),
         migrations.AddField(
             model_name='climbingobject',
             name='order',
             field=models.IntegerField(default=0),
-            preserve_default=False,
         ),
     ]

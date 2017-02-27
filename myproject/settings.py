@@ -37,11 +37,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'sghyv&fc*%u25l_=&=0latcdx3)2r!t2=0du!98r!rtk4w&zgz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'step-up-mountains.herokuapp.com']
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
@@ -121,24 +121,28 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'wsgi','static')
-STATICFILES_FINDERS = (
-'django.contrib.staticfiles.finders.FileSystemFinder',
-'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
 )
 
-LOGIN_URL = '/'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-#STATICFILES_DIRS = (
-## Put strings here, like "/home/html/static" or "C:/www/django/static".
-## Always use forward slashes, even on Windows.
-## Don't forget to use absolute paths, not relative paths.
-#os.path.join(BASE_DIR,"static"),
-#)
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+LOGIN_URL = '/'
 
 import sys
 if ON_OPENSHIFT:
@@ -146,8 +150,8 @@ if ON_OPENSHIFT:
 else:
 	path = ""
 
-sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/"))
-sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/accounts/"))
+#sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/"))
+#sys.path.append(os.path.join(os.getcwd(), path, "stepupmountains/manageobjects/accounts/"))
 
 DATETIME_FORMAT = 'Y-m-d H:i'
 USE_L10N = False
@@ -157,3 +161,7 @@ LOGIN_REDIRECT_URL = '/'
 	#from pprint import pprint as p
 	#print p(sys.path)
 
+import dj_database_url
+db_from_env = dj_database_url.config()
+if db_from_env:
+    DATABASES['default'].update(db_from_env)

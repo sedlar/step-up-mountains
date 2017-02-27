@@ -16,6 +16,5 @@ class Migration(migrations.Migration):
             model_name='climbed',
             name='datetime',
             field=models.DateTimeField(default=django.utils.timezone.now),
-            preserve_default=True,
         ),
     ]
