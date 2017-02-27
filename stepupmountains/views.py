@@ -95,7 +95,7 @@ def statistics(request):
         average_climb = 'N/A'
         average_active_climb = 'N/A'
         highest_mountain_climbed = 'N/A'
-        fastest_climb = 'N/A'
+        str_fastest_climb = 'N/A'
     else:
         first_climbed = first_climbed_date.datetime
         total_days = (timezone.now().date()-first_climbed.date()).days+1
